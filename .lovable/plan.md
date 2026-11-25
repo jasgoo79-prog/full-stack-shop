@@ -1,23 +1,25 @@
-# Fundația magazinului online + pagina de produs după modelul atașat
+# Panou de administrare pentru pagini de produs (după modelul atașat)
 
 ## Notă despre tehnologie
-Lovable nu poate rula Express, MongoDB sau Socket.io separat. Echivalentele pe care le folosesc:
-- React + Express -> React cu funcții de server integrate (aceeași aplicație)
-- MongoDB -> baza de date Lovable Cloud
-- JWT Auth -> autentificarea Lovable Cloud (folosește tot token-uri JWT)
-- Socket.io -> actualizări live prin Lovable Cloud (de ex. numărul de vizitatori/observatori)
-- TailwindCSS -> rămâne la fel
+Lovable nu rulează Express/MongoDB/Socket.io separat. Folosesc: React + funcții de server integrate, baza de date și autentificarea (JWT) din Lovable Cloud, Tailwind.
 
 ## Ce construiesc
-1. **Pagina de produs** (`/produs/:id`), fidelă modelului: antet cu logo și căutare, breadcrumb, galerie cu miniaturi, titlu, preț și reducere, stare, buton Cumpără / Adaugă în coș / Urmărește, livrare, plăți, retur, specificații, descriere, informații vânzător și feedback-uri. Textele rămân în italiană, ca în model.
-2. **Pagina principală** (`/`): lista de produse cu link spre fiecare pagină.
-3. **Cont**: înregistrare, autentificare, deconectare.
-4. **Coș** (`/cos`): adăugare/ștergere produse, salvat în cont.
-5. **Live**: "X persoane văd acum" și numărul de observatori se actualizează în timp real.
-6. **Produse demo**: 3–4 produse completate cu datele din model.
+1. **Autentificare admin** (`/auth`): doar conturile cu rol de admin intră în panou.
+2. **Panou admin** (`/admin`): lista paginilor create, cu căutare, editare, duplicare, ștergere, link "Deschide pagina".
+3. **Editor produs** (`/admin/produse/nou` și `/admin/produse/:id`): formular cu toate câmpurile din model:
+   - logo, link logo, nume site, culoare brand
+   - poze (încărcare sau link, reordonare)
+   - titlu, recenzii, categorie/subcategorie
+   - preț, preț vechi, reducere, TVA, stare, disponibilitate
+   - vânzător, livrare, locație, ridicare, dată livrare, vizualizări, observatori, număr obiect
+   - metode de plată, retur, garanție
+   - specificații (listă nume/valoare)
+   - descriere, informații vânzător, feedback-uri (listă), link feedback
+   - previzualizare live alături de formular
+4. **Pagina publică de produs** (`/p/:slug`): identică vizual cu modelul (antet, galerie, preț, butoane, specificații, descriere, feedback), cu link unic de distribuit.
 
 ## Detalii tehnice
-- Tabele: products (toate câmpurile din obiectul PRODOTTO, inclusiv specificații/feedback ca JSON), profiles, cart_items, watchers; RLS + grant-uri.
-- Citire publică a produselor; coșul și observarea doar pentru utilizatorul autentificat.
-- Design: culorile, fontul și spațierile din model, ca variabile în stilurile aplicației.
-- Plata reală (checkout) nu e inclusă acum; o putem adăuga ulterior.
+- Tabele: product_pages (câmpurile de mai sus, liste ca JSON, slug unic, publicat/ciornă), user_roles (rol admin separat) + has_role; RLS: public citește doar paginile publicate, doar adminii scriu.
+- Stocare pentru poze încărcate.
+- Primul cont creat devine admin (sau îl setez manual după ce te înregistrezi).
+- Stilurile (culori, font, spațieri) preluate din model.
