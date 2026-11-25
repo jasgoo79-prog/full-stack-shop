@@ -1,0 +1,142 @@
+{
+  "logoUrl": "https://i.ibb.co/CKF4b1r3/Capture.png",
+  "logoLink": "#",
+  "nomeSito": "Il tuo negozio",
+  "coloreBrand": "#e53238",
+  "immagini": [],
+  "titolo": "Titolo dell'inserzione del prodotto",
+  "votoRecensioni": "",
+  "numeroRecensioni": "",
+  "categoria": "Categoria",
+  "sottocategoria": "Sottocategoria",
+  "prezzo": "EUR 0,00",
+  "prezzoPrecedente": "",
+  "scontoBadge": "",
+  "notaIva": "IVA inclusa (ove applicabile)",
+  "condizione": "Nuovo",
+  "disponibilita": "Disponibile",
+  "venditore": "nome_venditore",
+  "venditeVenditore": "(1.250)",
+  "feedbackVenditore": "100% di feedback positivo",
+  "spedizione": "Spedizione gratuita • Consegna stimata entro 2-4 giorni lavorativi",
+  "luogoOggetto": "Italia",
+  "ritiro": "Ritiro gratuito in zona Cagliari, Italia",
+  "consegna": "Consegna prevista tra il 27 Nov e il 2 Dic",
+  "visualizzazioniOggi": 8,
+  "osservatori": 5,
+  "altriOsservano": "",
+  "numeroOggetto": "100000000000",
+  "pagamenti": [
+    "PayPal",
+    "Apple Pay",
+    "Google Pay",
+    "Visa",
+    "Mastercard"
+  ],
+  "restituzione": "Restituzione entro 30 giorni",
+  "dettagliRestituzione": "L'acquirente paga le spese di restituzione",
+  "garanzia": "",
+  "specifiche": [
+    {
+      "nome": "Condizione",
+      "valore": "Nuovo"
+    },
+    {
+      "nome": "Marca",
+      "valore": "-"
+    },
+    {
+      "nome": "Modello",
+      "valore": "-"
+    },
+    {
+      "nome": "Garanzia",
+      "valore": "24 mesi"
+    }
+  ],
+  "descrizione": "Inserisci qui la descrizione dettagliata del prodotto.",
+  "venditoreInfo": {
+    "feedbackPct": "100% di feedback positivi",
+    "oggettiVenduti": "821 oggetti venduti",
+    "valutazioni": "299",
+    "dal": "Su questo sito da: May 2005",
+    "nota": "Registrato come venditore privato. Pertanto non si applicano i diritti dei consumatori derivanti dalla normativa europea."
+  },
+  "linkFeedback": "#",
+  "feedback": [
+    {
+      "utente": "a***i (82)",
+      "quando": "Ultimo anno",
+      "verificato": true,
+      "testo": "Oggetto conforme alla descrizione. Venditore preciso e affidabile.",
+      "oggetto": "Batteria Dyson V11 Modello A Viti , Compattibile (N° 227299242342)"
+    },
+    {
+      "utente": "b***c (117)",
+      "quando": "Ultimi 6 mesi",
+      "verificato": true,
+      "testo": "Tutto ok, ricevuto assieme agli accessori.",
+      "oggetto": "Aspirapolvere Dyson V11 Absolute Pro (N° 327271224376)"
+    },
+    {
+      "utente": "Feedback automatico",
+      "quando": "Mese scorso",
+      "verificato": false,
+      "testo": "Ordine consegnato puntualmente senza problemi",
+      "oggetto": "Cerchio In Lega Mercedes Classe A B C W246 Ruota Scorta da 17 (N° 227508614132)"
+    },
+    {
+      "utente": "v***d (1)",
+      "quando": "Mese scorso",
+      "verificato": true,
+      "testo": "L'imballo eccellente",
+      "oggetto": "Cerchio In Lega Mercedes Classe A B C W246 Ruota Scorta da 17 (N° 227508614132)"
+    },
+    {
+      "utente": "Feedback automatico di eBay",
+      "quando": "Mese scorso",
+      "verificato": false,
+      "testo": "Ordine consegnato puntualmente senza problemi",
+      "oggetto": "Avvitatore Trapano 12V Brushless Parkside Performance PBSPA 12 E4 SENZA BATTERIA (N° 227314533995)"
+    },
+    {
+      "utente": "Feedback automatico di eBay",
+      "quando": "Mese scorso",
+      "verificato": false,
+      "testo": "Ordine consegnato puntualmente senza problemi",
+      "oggetto": "Contenitore Polvere PerAspirapolvere Dyson V10 V11 V15 Nuovo Uguale A Originale (N° 227331150642)"
+    },
+    {
+      "utente": "Feedback automatico di eBay",
+      "quando": "Ultimi 6 mesi",
+      "verificato": false,
+      "testo": "Ordine consegnato puntualmente senza problemi",
+      "oggetto": "Aurora Hastil Con Scatola e Documenti - Pennino Oro 14K Penna Stilografica Box (N° 227216577622)"
+    }
+  ],
+  "footer": {
+    "righe": [
+      "Azienda",
+      "Bacheca Annunci",
+      "Community",
+      "Spazio Sicurezza",
+      "Come vendere",
+      "Spazio venditori",
+      "Regole",
+      "Traduzione",
+      "Pubblicità"
+    ],
+    "compatto": [
+      "Aiuto e contatti",
+      "Mappa del Sito"
+    ],
+    "legale": [
+      "Accessibilità",
+      "Accordo per gli utenti",
+      "Privacy",
+      "Condizioni di utilizzo dei servizi di pagamento",
+      "Cookie",
+      "Diritto di recesso"
+    ]
+  }
+}

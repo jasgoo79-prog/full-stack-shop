@@ -1,0 +1,1400 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Inserzione Prodotto</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --color-background-primary: #ffffff;
+      --color-background-secondary: #f7f7f7;
+      --color-background-elevated: #ffffff;
+      --color-background-accent: #3665f3;
+      --color-background-accent-hover: #2b52c9;
+      --color-background-subtle-blue: #eef3fe;
+      --color-background-success-subtle: #e9f7ef;
+
+      --color-foreground-primary: #191919;
+      --color-foreground-secondary: #707070;
+      --color-foreground-tertiary: #8f8f8f;
+      --color-foreground-accent: #3665f3;
+      --color-foreground-on-accent: #ffffff;
+      --color-foreground-success: #1b873f;
+
+      --color-stroke-subtle: #e5e5e5;
+      --color-stroke-default: #c7c7c7;
+      --color-stroke-strong: #191919;
+      --color-stroke-accent: #3665f3;
+
+      --border-radius-50: 8px;
+      --border-radius-100: 16px;
+      --border-radius-150: 24px;
+      --border-radius-full: 9999px;
+
+      --shadow-subtle: 0 2px 8px rgba(0, 0, 0, 0.06);
+      --shadow-medium: 0 4px 16px rgba(0, 0, 0, 0.10);
+
+      --font-family-sans: "Market Sans", "Inter", -apple-system, BlinkMacSystemFont, "Helvetica Neue", "Segoe UI", Roboto, Arial, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-family-sans);
+      background-color: var(--color-background-primary);
+      color: var(--color-foreground-primary);
+      font-size: 14px;
+      line-height: 1.45;
+      letter-spacing: -0.006em;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* Header identic eBay */
+    .gh-header {
+      border-bottom: 1px solid var(--color-stroke-subtle);
+      background: var(--color-background-primary);
+    }
+
+    .gh-top-bar {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 6px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+      color: var(--color-foreground-primary);
+      border-bottom: 1px solid #f0f0f0;
+    }
+
+    .gh-top-links {
+      display: flex;
+      gap: 18px;
+      align-items: center;
+    }
+
+    .gh-top-links a {
+      color: var(--color-foreground-primary);
+      text-decoration: none;
+    }
+
+    .gh-top-links a:hover {
+      text-decoration: underline;
+    }
+
+    .gh-main-bar {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 14px 24px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .ebay-logo {
+      font-size: 32px;
+      font-weight: 800;
+      letter-spacing: -0.05em;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      line-height: 1;
+      flex-shrink: 0;
+    }
+
+    .ebay-logo span:nth-child(1) { color: #e53238; }
+    .ebay-logo span:nth-child(2) { color: #0064d2; }
+    .ebay-logo span:nth-child(3) { color: #f5af02; }
+    .ebay-logo span:nth-child(4) { color: #86b817; }
+
+    .ebay-logo img {
+      max-height: 44px;
+      max-width: 160px;
+      width: auto;
+      height: auto;
+      object-fit: contain;
+      display: block;
+    }
+
+    .gh-search-box {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      border: 2px solid var(--color-stroke-strong);
+      border-radius: var(--border-radius-full);
+      overflow: hidden;
+      height: 42px;
+      background: #fff;
+    }
+
+    .gh-search-box input {
+      flex: 1;
+      border: none;
+      padding: 0 18px;
+      font-size: 14px;
+      outline: none;
+      font-family: inherit;
+    }
+
+    .gh-search-btn {
+      background: var(--color-background-accent);
+      color: #fff;
+      border: none;
+      padding: 0 28px;
+      font-weight: 700;
+      font-size: 14px;
+      cursor: pointer;
+      border-radius: var(--border-radius-full);
+      margin: 2px;
+      height: calc(100% - 4px);
+    }
+
+    /* Breadcrumb */
+    .vi-breadcrumb-bar {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 12px 24px 6px;
+      font-size: 12px;
+      color: var(--color-foreground-secondary);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .vi-breadcrumb-bar a {
+      color: var(--color-foreground-secondary);
+      text-decoration: none;
+    }
+
+    .vi-breadcrumb-bar a:hover {
+      text-decoration: underline;
+    }
+
+    /* Main Container */
+    .vi-main-container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 14px 24px 48px;
+    }
+
+    /* Product Layout Grid */
+    .vi-product-grid {
+      display: grid;
+      grid-template-columns: 1.18fr 0.82fr;
+      gap: 36px;
+      align-items: start;
+    }
+
+    @media (max-width: 960px) {
+      .vi-product-grid {
+        grid-template-columns: 1fr;
+        gap: 24px;
+      }
+    }
+
+    /* Left Column: Gallery */
+    .vi-gallery-wrapper {
+      display: grid;
+      grid-template-columns: 74px 1fr;
+      gap: 14px;
+      position: sticky;
+      top: 16px;
+    }
+
+    @media (max-width: 640px) {
+      .vi-gallery-wrapper {
+        grid-template-columns: 1fr;
+        position: static;
+      }
+    }
+
+    .vi-thumbs-col {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      max-height: 560px;
+      overflow-y: auto;
+    }
+
+    @media (max-width: 640px) {
+      .vi-thumbs-col {
+        flex-direction: row;
+        order: 2;
+      }
+    }
+
+    .vi-thumb-btn {
+      width: 70px;
+      height: 70px;
+      border-radius: var(--border-radius-50);
+      border: 1px solid var(--color-stroke-subtle);
+      background: var(--color-background-secondary);
+      padding: 4px;
+      cursor: pointer;
+      overflow: hidden;
+      flex-shrink: 0;
+      transition: all 0.15s ease;
+    }
+
+    .vi-thumb-btn:hover {
+      border-color: var(--color-stroke-default);
+    }
+
+    .vi-thumb-btn.active {
+      border: 2px solid var(--color-stroke-strong);
+    }
+
+    .vi-thumb-btn img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+    }
+
+    .vi-main-stage {
+      background: var(--color-background-secondary);
+      border: 1px solid var(--color-stroke-subtle);
+      border-radius: var(--border-radius-100);
+      aspect-ratio: 1 / 1;
+      max-height: 560px;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      padding: 20px;
+    }
+
+    .vi-main-stage img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      transition: transform 0.25s ease;
+    }
+
+    .vi-main-stage:hover img {
+      transform: scale(1.04);
+    }
+
+    .vi-gallery-counter {
+      position: absolute;
+      bottom: 14px;
+      right: 14px;
+      background: rgba(25, 25, 25, 0.72);
+      color: #fff;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: var(--border-radius-full);
+    }
+
+    .vi-nav-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      border: 1px solid var(--color-stroke-subtle);
+      background: rgba(255, 255, 255, 0.92);
+      box-shadow: var(--shadow-subtle);
+      cursor: pointer;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--color-foreground-primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .vi-nav-arrow:hover {
+      background: #ffffff;
+    }
+
+    .vi-nav-prev { left: 12px; }
+    .vi-nav-next { right: 12px; }
+
+    /* Right Column: Buy Box */
+    .vi-buybox-col {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .vi-title {
+      font-size: 22px;
+      font-weight: 700;
+      line-height: 1.28;
+      letter-spacing: -0.022em;
+      color: var(--color-foreground-primary);
+    }
+
+    .vi-rating-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      color: var(--color-foreground-secondary);
+      margin-top: -6px;
+    }
+
+    .vi-stars {
+      color: #191919;
+      letter-spacing: 1px;
+      font-size: 13px;
+    }
+
+    .vi-rating-score {
+      font-weight: 700;
+      color: var(--color-foreground-primary);
+    }
+
+    .vi-seller-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 14px;
+      background: var(--color-background-secondary);
+      border-radius: var(--border-radius-50);
+      font-size: 13px;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .vi-seller-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .vi-seller-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: #f0a30a;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 15px;
+      color: #191919;
+    }
+
+    .vi-seller-name-line {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .vi-seller-name {
+      font-weight: 700;
+      color: var(--color-foreground-primary);
+      text-decoration: underline;
+    }
+
+    .vi-seller-sales {
+      color: var(--color-foreground-secondary);
+      font-size: 12px;
+    }
+
+    .vi-seller-feedback {
+      color: var(--color-foreground-secondary);
+      font-size: 12px;
+      margin-top: 1px;
+    }
+
+    .vi-seller-links {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 3px;
+      font-size: 12px;
+    }
+
+    .vi-seller-links a {
+      color: var(--color-foreground-primary);
+      text-decoration: underline;
+    }
+
+    .vi-divider {
+      height: 1px;
+      background: var(--color-stroke-subtle);
+      border: none;
+    }
+
+    .vi-meta-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 14px;
+    }
+
+    .vi-meta-label {
+      color: var(--color-foreground-secondary);
+      min-width: 96px;
+    }
+
+    .vi-meta-value-wrap {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .vi-meta-value {
+      font-weight: 700;
+      color: var(--color-foreground-primary);
+    }
+
+    .vi-cond-info-btn {
+      width: 17px;
+      height: 17px;
+      border-radius: 50%;
+      border: 1.5px solid var(--color-foreground-primary);
+      background: transparent;
+      color: var(--color-foreground-primary);
+      font-family: Georgia, "Times New Roman", serif;
+      font-style: italic;
+      font-weight: 700;
+      font-size: 11px;
+      line-height: 1;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      padding: 0;
+      flex-shrink: 0;
+      transition: background-color 0.15s ease;
+    }
+
+    .vi-cond-info-btn:hover {
+      background: var(--color-background-secondary);
+    }
+
+    .vi-cond-modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.48);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      z-index: 60;
+    }
+
+    .vi-cond-modal-backdrop[hidden] {
+      display: none;
+    }
+
+    .vi-cond-modal {
+      position: relative;
+      width: 100%;
+      max-width: 540px;
+      background: var(--color-background-primary);
+      border-radius: 20px;
+      padding: 24px 26px 26px;
+      box-shadow: 0 12px 36px rgba(0, 0, 0, 0.22);
+      color: var(--color-foreground-primary);
+    }
+
+    .vi-cond-modal-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 14px;
+    }
+
+    .vi-cond-modal-title {
+      font-size: 20px;
+      font-weight: 700;
+      line-height: 1.25;
+      color: var(--color-foreground-primary);
+      padding-top: 4px;
+    }
+
+    .vi-cond-modal-close {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      border: 0;
+      background: var(--color-background-secondary);
+      color: var(--color-foreground-primary);
+      font-size: 16px;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    .vi-cond-modal-close:hover {
+      background: #e8e8e8;
+    }
+
+    .vi-cond-modal-body {
+      font-size: 15px;
+      line-height: 1.45;
+      color: var(--color-foreground-primary);
+    }
+
+    .vi-price-section {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      padding: 2px 0;
+    }
+
+    .vi-price-row {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .vi-price-current {
+      font-size: 32px;
+      font-weight: 800;
+      line-height: 1.15;
+      letter-spacing: -0.028em;
+      color: var(--color-foreground-primary);
+    }
+
+    .vi-price-old {
+      font-size: 15px;
+      color: var(--color-foreground-secondary);
+      text-decoration: line-through;
+    }
+
+    .vi-discount-badge {
+      background: var(--color-background-success-subtle);
+      color: var(--color-foreground-success);
+      font-size: 12px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: var(--border-radius-full);
+    }
+
+    .vi-tax-note {
+      font-size: 12px;
+      color: var(--color-foreground-secondary);
+    }
+
+    .vi-qty-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 14px;
+    }
+
+    .vi-qty-input {
+      width: 64px;
+      padding: 7px 10px;
+      border: 1px solid var(--color-stroke-default);
+      border-radius: var(--border-radius-50);
+      font-size: 14px;
+      font-family: inherit;
+      font-weight: 600;
+      color: var(--color-foreground-primary);
+    }
+
+    .vi-stock-text {
+      font-size: 13px;
+      color: var(--color-foreground-secondary);
+    }
+
+    .vi-cta-group {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 2px;
+    }
+
+    .vi-btn {
+      width: 100%;
+      padding: 13px 24px;
+      border-radius: var(--border-radius-full);
+      font-family: inherit;
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: background-color 0.15s ease;
+    }
+
+    .vi-btn-primary {
+      background: var(--color-background-accent);
+      color: var(--color-foreground-on-accent);
+    }
+
+    .vi-btn-primary:hover {
+      background: var(--color-background-accent-hover);
+    }
+
+    .vi-btn-secondary {
+      background: var(--color-background-primary);
+      color: var(--color-foreground-accent);
+      border-color: var(--color-stroke-accent);
+    }
+
+    .vi-btn-secondary:hover {
+      background: var(--color-background-subtle-blue);
+    }
+
+    .vi-btn-watchlist {
+      background: var(--color-background-primary);
+      color: var(--color-foreground-primary);
+      border-color: var(--color-stroke-default);
+      font-size: 14px;
+      font-weight: 600;
+      padding: 10px 20px;
+    }
+
+    .vi-btn-watchlist:hover {
+      background: var(--color-background-secondary);
+    }
+
+    /* Info Box: Spedizione, Pagamenti, Restituzione, Garanzia eBay */
+    .vi-shipping-box {
+      border: 1px solid var(--color-stroke-subtle);
+      border-radius: var(--border-radius-100);
+      padding: 16px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .vi-shipping-line {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+
+    .vi-shipping-key {
+      min-width: 104px;
+      color: var(--color-foreground-secondary);
+      flex-shrink: 0;
+    }
+
+    .vi-shipping-val {
+      color: var(--color-foreground-primary);
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .vi-shipping-main {
+      font-weight: 600;
+    }
+
+    .vi-shipping-sub {
+      font-size: 12px;
+      color: var(--color-foreground-secondary);
+    }
+
+    .vi-payment-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .vi-pay-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      height: 24px;
+      line-height: 0;
+      flex-shrink: 0;
+    }
+
+    .vi-pay-icon svg {
+      height: 24px;
+      width: auto;
+      display: block;
+    }
+
+    .vi-pay-pill {
+      border: 1px solid var(--color-stroke-subtle);
+      background: var(--color-background-secondary);
+      border-radius: 4px;
+      padding: 2px 7px;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--color-foreground-primary);
+      letter-spacing: 0.01em;
+    }
+
+    .vi-guarantee-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 600;
+      color: var(--color-foreground-primary);
+    }
+
+    .vi-guarantee-shield {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--color-background-subtle-blue);
+      color: var(--color-foreground-accent);
+      font-size: 11px;
+      font-weight: 800;
+      flex-shrink: 0;
+    }
+
+    /* Bottom Tabs & Details (Specifiche + Descrizione) */
+    .vi-details-container {
+      margin-top: 40px;
+      border: 1px solid var(--color-stroke-subtle);
+      border-radius: var(--border-radius-100);
+      background: var(--color-background-primary);
+      overflow: hidden;
+    }
+
+    .vi-tabs-header {
+      display: flex;
+      border-bottom: 1px solid var(--color-stroke-subtle);
+      background: var(--color-background-secondary);
+      padding: 0 24px;
+      gap: 24px;
+    }
+
+    .vi-tab-item {
+      padding: 14px 4px;
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      color: var(--color-foreground-primary);
+      border-bottom: 3px solid var(--color-stroke-strong);
+    }
+
+    .vi-details-body {
+      padding: 24px 28px 32px;
+    }
+
+    .vi-section-heading {
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: -0.018em;
+      margin-bottom: 16px;
+      color: var(--color-foreground-primary);
+    }
+
+    .vi-specs-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px 36px;
+      margin-bottom: 32px;
+    }
+
+    @media (max-width: 720px) {
+      .vi-specs-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .vi-spec-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 8px 0;
+      border-bottom: 1px solid #f0f0f0;
+      font-size: 14px;
+    }
+
+    .vi-spec-label {
+      color: var(--color-foreground-secondary);
+    }
+
+    .vi-spec-value {
+      font-weight: 600;
+      color: var(--color-foreground-primary);
+      text-align: right;
+    }
+
+    .vi-description-box {
+      padding-top: 24px;
+      border-top: 1px solid var(--color-stroke-subtle);
+    }
+
+    .vi-description-content {
+      font-size: 15px;
+      line-height: 1.65;
+      color: var(--color-foreground-primary);
+      white-space: pre-line;
+    }
+
+    /* ===== Aggiunte: badge, strumenti galleria, venditore/feedback, footer, lightbox ===== */
+    .vi-main-stage { position: relative; }
+    .vi-views-badge { position: absolute; left: 16px; top: 16px; z-index: 3; background: #c82314; color: #fff; font-size: 12px; font-weight: 700; text-transform: uppercase; border-radius: 14px; padding: 3px 12px; }
+    .vi-stage-tools { position: absolute; right: 16px; top: 16px; z-index: 3; display: flex; gap: 10px; }
+    .vi-pill { height: 44px; min-width: 44px; padding: 0 14px; border: 0; border-radius: 22px; background: #fff; color: var(--color-foreground-primary); box-shadow: 0 2px 6px rgba(0,0,0,.18); display: inline-flex; align-items: center; justify-content: center; gap: 8px; font: inherit; font-size: 16px; cursor: pointer; }
+    .vi-pill.on .vi-heart-svg { fill: #c82314; stroke: #c82314; }
+    .vi-watchers { margin: 14px 0; background: var(--color-background-secondary); border-radius: var(--border-radius-100); padding: 14px 16px; font-size: 13px; }
+    .vi-spec-num { text-align: right; color: var(--color-foreground-secondary); font-size: 12px; margin-bottom: 8px; }
+    .vi-seller-section { margin-top: 48px; background: var(--color-background-secondary); padding: 40px; display: grid; grid-template-columns: 1fr 1.8fr; gap: 48px; }
+    .vi-ss-h { font-size: 21px; line-height: 1.2; margin-bottom: 20px; font-weight: 700; }
+    .vi-ss-h span { color: var(--color-foreground-secondary); font-weight: 400; }
+    .vi-ss-head { display: flex; align-items: center; gap: 20px; }
+    .vi-ss-avatar { width: 90px; height: 90px; border-radius: 50%; background: #f0a30a; font-size: 52px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex: none; }
+    .vi-ss-head b { display: block; font-size: 17px; margin-bottom: 4px; }
+    .vi-ss-sub, .vi-fb-meta, .vi-fb-item-link { color: var(--color-foreground-secondary); font-size: 12px; }
+    .vi-ss-since { margin: 22px 0 18px; }
+    .vi-fb-item { margin-bottom: 24px; }
+    .vi-fb-item p { margin: 6px 0; font-size: 14px; }
+    .vi-fb-meta { display: flex; gap: 10px; align-items: center; }
+    .vi-fb-meta i { width: 14px; height: 14px; border-radius: 50%; background: var(--color-foreground-success); color: #fff; font-style: normal; font-size: 11px; line-height: 14px; text-align: center; flex: none; }
+    .vi-fb-item-link { text-decoration: underline; }
+    .vi-fb-all { display: inline-flex; align-items: center; justify-content: center; border: 1px solid var(--color-stroke-accent); color: var(--color-foreground-accent); background: #fff; border-radius: 20px; height: 40px; padding: 0 20px; font: inherit; font-weight: 600; cursor: pointer; text-decoration: none; }
+    .vi-fb-all:hover { background: var(--color-background-subtle-blue); }
+    .vi-footer { border-top: 1px solid var(--color-stroke-subtle); margin-top: 48px; padding: 44px 0 30px; font-size: 11px; }
+    .vi-footer-in { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
+    .vi-footer-row { display: flex; flex-wrap: wrap; gap: 22px; margin-bottom: 14px; }
+    .vi-footer a { color: var(--color-foreground-primary); text-decoration: underline; }
+    .vi-lightbox { position: fixed; inset: 0; background: rgba(0,0,0,.88); display: flex; align-items: center; justify-content: center; z-index: 50; }
+    .vi-lightbox[hidden] { display: none; }
+    .vi-lightbox img { max-width: 92vw; max-height: 90vh; object-fit: contain; }
+    .vi-lb-close { position: absolute; top: 20px; right: 20px; }
+    @media (max-width: 960px) { .vi-seller-section { grid-template-columns: 1fr; padding: 24px 16px; gap: 28px; } }
+    </style>
+</head>
+<body>
+
+  <!-- =====================================================================
+       CONFIGURAZIONE PRODOTTO (Modifica aici logo-ul, pozele, prețul, etc.)
+       ===================================================================== -->
+  <script>
+    const PRODOTTO = /*__PRODOTTO__*/null;
+  </script>
+
+  <!-- Global Header eBay -->
+  <header class="gh-header">
+    <div class="gh-top-bar">
+      <div class="gh-top-links">
+        <span>Ciao! <a href="#" style="color:#3665f3;">Accedi</a> o <a href="#" style="color:#3665f3;">registrati</a></span>
+        <a href="#">eBay Extra</a>
+        <a href="#">Offerte</a>
+        <a href="#">Aiuto e contatti</a>
+      </div>
+      <div class="gh-top-links">
+        <a href="#">Vendi</a>
+        <a href="#">Oggetti che osservi</a>
+        <a href="#">Il mio eBay</a>
+      </div>
+    </div>
+
+    <div class="gh-main-bar">
+      <a href="#" class="ebay-logo" id="elLogoContainer" aria-label="Home page">
+        <span id="elLogoText"></span>
+      </a>
+      <div class="gh-search-box">
+        <input type="text" placeholder="Cerca qualsiasi cosa" aria-label="Cerca qualsiasi cosa" />
+        <button type="button" class="gh-search-btn">Cerca</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Breadcrumb -->
+  <nav class="vi-breadcrumb-bar" aria-label="Percorso">
+    <a href="#">Home</a> &rsaquo;
+    <a href="#" id="elCategoria"></a> &rsaquo;
+    <span id="elSottocategoria"></span>
+  </nav>
+
+  <!-- Main Product Page -->
+  <main class="vi-main-container">
+    <div class="vi-product-grid">
+
+      <!-- Left: Galleria Immagini -->
+      <section class="vi-gallery-wrapper" aria-label="Galleria immagini">
+        <div class="vi-thumbs-col" id="elThumbsCol"></div>
+
+        <div class="vi-main-stage">
+          <button type="button" class="vi-nav-arrow vi-nav-prev" id="btnPrevImg" aria-label="Immagine precedente">&lsaquo;</button>
+          <span class="vi-views-badge" id="elViews"></span>
+          <div class="vi-stage-tools">
+            <button type="button" class="vi-pill" id="btnExpand" aria-label="Schermo intero"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 4h6v6M10 20H4v-6M20 4l-7 7M4 20l7-7"/></svg></button>
+            <button type="button" class="vi-pill" id="btnHeart" aria-label="Aggiungi agli oggetti che osservi"><span id="elLikes"></span><svg class="vi-heart-svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 21s-8-5-8-11a4.600 4.600 0 018-3 4.600 4.600 0 018 3c0 6-8 11-8 11z"/></svg></button>
+          </div>
+          <img id="elMainImg" src="" alt="Immagine prodotto" />
+          <button type="button" class="vi-nav-arrow vi-nav-next" id="btnNextImg" aria-label="Immagine successiva">&rsaquo;</button>
+          <span class="vi-gallery-counter" id="elImgCounter"></span>
+        </div>
+      </section>
+
+      <!-- Right: Dettagli Acquisto -->
+      <section class="vi-buybox-col">
+        <h1 class="vi-title" id="elTitolo"></h1>
+
+        <div class="vi-rating-row" id="elRatingRow">
+          <span class="vi-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+          <span class="vi-rating-score" id="elVotoRecensioni"></span>
+          <span id="elNumeroRecensioni"></span>
+        </div>
+
+        <div class="vi-seller-card">
+          <div class="vi-seller-info">
+            <div class="vi-seller-avatar" id="elSellerInitial">V</div>
+            <div>
+              <div class="vi-seller-name-line">
+                <a href="#" class="vi-seller-name" id="elVenditore"></a>
+                <span class="vi-seller-sales" id="elVenditeVenditore"></span>
+              </div>
+              <div class="vi-seller-feedback" id="elFeedback"></div>
+            </div>
+          </div>
+          <div class="vi-seller-links">
+           
+          </div>
+        </div>
+
+        <hr class="vi-divider" />
+
+        <div class="vi-meta-row">
+          <span class="vi-meta-label">Condizione:</span>
+          <span class="vi-meta-value-wrap">
+            <span class="vi-meta-value" id="elCondizione"></span>
+            <button type="button" class="vi-cond-info-btn" id="btnCondInfo" aria-label="Informazioni sulla condizione">i</button>
+          </span>
+        </div>
+
+        <div class="vi-price-section">
+          <div class="vi-price-row">
+            <span class="vi-price-current" id="elPrezzo"></span>
+            <span class="vi-price-old" id="elPrezzoPrecedente"></span>
+            <span class="vi-discount-badge" id="elScontoBadge"></span>
+          </div>
+          <div class="vi-tax-note" id="elNotaIva"></div>
+        </div>
+
+        <div class="vi-qty-row">
+          <span class="vi-meta-label">Quantità:</span>
+          <input type="number" class="vi-qty-input" value="1" min="1" aria-label="Quantità" />
+          <span class="vi-stock-text" id="elDisponibilita"></span>
+        </div>
+
+        <div class="vi-watchers" id="elWatchers" hidden></div>
+
+        <div class="vi-cta-group">
+          <button type="button" class="vi-btn vi-btn-primary">Compralo Subito</button>
+        </div>
+
+        <div class="vi-shipping-box">
+          <div class="vi-shipping-line" id="elRitiroRow">
+            <span class="vi-shipping-key">Ritiro:</span>
+            <div class="vi-shipping-val"><span class="vi-shipping-main" id="elRitiro"></span></div>
+          </div>
+
+          <div class="vi-shipping-line">
+            <span class="vi-shipping-key">Spedizione:</span>
+            <div class="vi-shipping-val">
+              <span class="vi-shipping-main" id="elSpedizione"></span>
+              <span class="vi-shipping-sub">Luogo in cui si trova l'oggetto: <span id="elLuogo"></span></span>
+            </div>
+          </div>
+
+          <div class="vi-shipping-line" id="elConsegnaRow">
+            <span class="vi-shipping-key">Consegna:</span>
+            <div class="vi-shipping-val"><span class="vi-shipping-main" id="elConsegna"></span></div>
+          </div>
+
+          <div class="vi-shipping-line" id="elPagamentiRow">
+            <span class="vi-shipping-key">Pagamenti:</span>
+            <div class="vi-shipping-val">
+              <div class="vi-payment-badges" id="elPagamenti"></div>
+            </div>
+          </div>
+
+          <div class="vi-shipping-line">
+            <span class="vi-shipping-key">Restituzione:</span>
+            <div class="vi-shipping-val">
+              <span class="vi-shipping-main" id="elRestituzione"></span>
+              <span class="vi-shipping-sub" id="elDettagliRestituzione"></span>
+            </div>
+          </div>
+
+          <div class="vi-shipping-line" id="elGaranziaRow">
+            <span class="vi-shipping-key">Acquista con fiducia:</span>
+            <div class="vi-shipping-val">
+              <span class="vi-guarantee-badge">
+                <span class="vi-guarantee-shield">&#10003;</span>
+                <span id="elGaranziaEbay"></span>
+              </span>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- Bottom: Specifiche dell'oggetto & Descrizione -->
+    <section class="vi-details-container">
+      <div class="vi-tabs-header">
+        <div class="vi-tab-item">Informazioni sull'oggetto</div>
+      </div>
+
+      <div class="vi-details-body">
+        <h2 class="vi-section-heading">Specifiche dell'oggetto</h2>
+        <div class="vi-specs-grid" id="elSpecifiche"></div>
+
+        <div class="vi-description-box">
+          <h2 class="vi-section-heading">Descrizione dell'oggetto</h2>
+          <div class="vi-description-content" id="elDescrizione"></div>
+        </div>
+      </div>
+    </section>
+    <!-- Venditore + Feedback -->
+    <section class="vi-seller-section" aria-label="Venditore">
+      <div class="vi-ss-col">
+        <h3 class="vi-ss-h">Informazioni su questo venditore</h3>
+        <div class="vi-ss-head"><div class="vi-ss-avatar" id="elSsInitial"></div>
+          <div><b id="elSsName"></b><span class="vi-ss-sub" id="elSsSub"></span></div></div>
+        <p class="vi-ss-since" id="elSsDal"></p>
+        <p id="elSsNota"></p>
+      </div>
+      <div class="vi-ss-col">
+        <div class="vi-fb-head"><h3 class="vi-ss-h">Feedback sul venditore <span id="elFbCount"></span></h3></div>
+        <div id="elFbList"></div>
+        <a href="#" class="vi-fb-all" id="elFbAllLink">Vedi tutti i feedback</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="vi-footer"><div class="vi-footer-in">
+    <div class="vi-footer-row" id="elFtRighe"></div>
+    <div class="vi-footer-row" id="elFtCompatto"></div>
+    <div class="vi-footer-legal" id="elFtLegale"></div>
+  </div></footer>
+
+  <div class="vi-cond-modal-backdrop" id="elCondModal" hidden>
+    <div class="vi-cond-modal" role="dialog" aria-modal="true" aria-labelledby="elCondModalTitle">
+      <div class="vi-cond-modal-header">
+        <h3 class="vi-cond-modal-title" id="elCondModalTitle"></h3>
+        <button type="button" class="vi-cond-modal-close" id="btnCondClose" aria-label="Chiudi">&#10005;</button>
+      </div>
+      <p class="vi-cond-modal-body" id="elCondModalBody"></p>
+    </div>
+  </div>
+
+  <div class="vi-lightbox" id="elLightbox" hidden>
+    <button type="button" class="vi-pill vi-lb-close" id="btnLbClose" aria-label="Chiudi">&#10005;</button>
+    <img id="elLbImg" src="" alt="Immagine prodotto ingrandita" />
+  </div>
+
+  <script>
+    const ENDPOINT = "/api/products/{id}";   // GET -> JSON cu chei din PRODOTTO; gol "" = doar datele din pagină
+    async function __load() {
+      if (!ENDPOINT) return;
+      try {
+        const id = new URLSearchParams(location.search).get("id") || "";
+        const ctl = new AbortController();
+        const t = setTimeout(() => ctl.abort(), 4000);
+        const r = await fetch(ENDPOINT.replace("{id}", encodeURIComponent(id)), { signal: ctl.signal, headers: { Accept: "application/json" } });
+        clearTimeout(t);
+        if (r.ok) Object.assign(PRODOTTO, await r.json());
+      } catch (e) { /* fallback: PRODOTTO din pagină */ }
+    }
+    async function __init() {
+      await __load();
+      // Configurazione Logo
+      const logoText = document.getElementById("elLogoText");
+      logoText.textContent = PRODOTTO.nomeSito || "";
+      logoText.style.color = PRODOTTO.coloreBrand || "";
+      const logoContainer = document.getElementById("elLogoContainer");
+      if (PRODOTTO.logoLink) {
+        logoContainer.href = PRODOTTO.logoLink;
+      }
+      if (PRODOTTO.logoUrl && PRODOTTO.logoUrl.trim() !== "") {
+        logoContainer.innerHTML = "";
+        const logoImg = document.createElement("img");
+        logoImg.src = PRODOTTO.logoUrl.trim();
+        logoImg.alt = "Logo";
+        logoContainer.appendChild(logoImg);
+      }
+
+      const placeholderSvg =
+        "data:image/svg+xml;charset=UTF-8," +
+        encodeURIComponent(
+          `<svg xmlns="http://www.w3.org/2000/svg" width="800" height="800" viewBox="0 0 800 800">
+            <rect width="800" height="800" fill="#f7f7f7"/>
+            <rect x="180" y="180" width="440" height="440" rx="24" fill="#ffffff" stroke="#e5e5e5" stroke-width="3"/>
+            <path d="M330 450l70-85 55 65 40-48 75 68H330z" fill="#d8d8d8"/>
+            <circle cx="365" cy="330" r="26" fill="#d8d8d8"/>
+            <text x="400" y="530" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="20" fill="#707070">Nessuna immagine inserita</text>
+          </svg>`
+        );
+
+      const images =
+        Array.isArray(PRODOTTO.immagini) && PRODOTTO.immagini.length > 0
+          ? PRODOTTO.immagini
+          : [placeholderSvg];
+
+      let currentIdx = 0;
+
+      // Popola dati testo
+      document.title = (PRODOTTO.titolo || "Inserzione Prodotto") + (PRODOTTO.nomeSito ? " | " + PRODOTTO.nomeSito : "");
+      document.getElementById("elCategoria").textContent = PRODOTTO.categoria || "";
+      document.getElementById("elSottocategoria").textContent = PRODOTTO.sottocategoria || "";
+      document.getElementById("elTitolo").textContent = PRODOTTO.titolo || "";
+
+      // Rating opzionale
+      const ratingRow = document.getElementById("elRatingRow");
+      if (PRODOTTO.votoRecensioni && PRODOTTO.votoRecensioni.trim() !== "") {
+        document.getElementById("elVotoRecensioni").textContent = PRODOTTO.votoRecensioni;
+        document.getElementById("elNumeroRecensioni").textContent = PRODOTTO.numeroRecensioni || "";
+      } else {
+        ratingRow.style.display = "none";
+      }
+
+      document.getElementById("elVenditore").textContent = PRODOTTO.venditore || "";
+      document.getElementById("elVenditeVenditore").textContent = PRODOTTO.venditeVenditore || "";
+      document.getElementById("elSellerInitial").textContent = (PRODOTTO.venditore || "V").charAt(0).toUpperCase();
+      document.getElementById("elFeedback").textContent = PRODOTTO.feedbackVenditore || "";
+      const condText = PRODOTTO.condizione || "";
+      document.getElementById("elCondizione").textContent = condText;
+
+      const CONDIZIONE_INFO = {
+        nuovo: {
+          titolo: "Nuovo",
+          testo: "Oggetto nuovo, non usato, non aperto, non danneggiato, nella confezione originale (ove la confezione sia prevista). La confezione deve essere la stessa che si può trovare in negozio, a meno che l'oggetto non sia stato confezionato dal produttore in una confezione anonima, come una busta di plastica o una scatola senza stampa. Per ulteriori dettagli vedi l'inserzione."
+        },
+        usato: {
+          titolo: "Usato",
+          testo: "Oggetto che è stato usato. Un oggetto con alcuni segni di deterioramento dovuti all'uso ma in buono stato di funzionamento. Questo oggetto potrebbe essere stato usato come modello nel negozio o acquistato e poi restituito al venditore. Vedi l'inserzione del venditore per maggiori dettagli e la descrizione di eventuali imperfezioni."
+        }
+      };
+
+      const condInfoBtn = document.getElementById("btnCondInfo");
+      const condModal = document.getElementById("elCondModal");
+      const condModalTitle = document.getElementById("elCondModalTitle");
+      const condModalBody = document.getElementById("elCondModalBody");
+      const condCloseBtn = document.getElementById("btnCondClose");
+
+      const condKey = condText.trim().toLowerCase();
+      const activeCondInfo = CONDIZIONE_INFO[condKey] || (condText.trim()
+        ? {
+            titolo: condText.trim(),
+            testo: "Vedi l'inserzione del venditore per maggiori dettagli sulle condizioni dell'oggetto."
+          }
+        : null);
+
+      if (activeCondInfo) {
+        condInfoBtn.addEventListener("click", () => {
+          condModalTitle.textContent = activeCondInfo.titolo;
+          condModalBody.textContent = activeCondInfo.testo;
+          condModal.hidden = false;
+        });
+        condCloseBtn.addEventListener("click", () => { condModal.hidden = true; });
+        condModal.addEventListener("click", e => {
+          if (e.target === condModal) condModal.hidden = true;
+        });
+      } else {
+        condInfoBtn.style.display = "none";
+      }
+
+      document.getElementById("elPrezzo").textContent = PRODOTTO.prezzo || "";
+
+      const elOld = document.getElementById("elPrezzoPrecedente");
+      elOld.textContent = PRODOTTO.prezzoPrecedente || "";
+      elOld.style.display = PRODOTTO.prezzoPrecedente ? "inline" : "none";
+
+      const elDisc = document.getElementById("elScontoBadge");
+      elDisc.textContent = PRODOTTO.scontoBadge || "";
+      elDisc.style.display = PRODOTTO.scontoBadge ? "inline-block" : "none";
+
+      document.getElementById("elNotaIva").textContent = PRODOTTO.notaIva || "";
+      document.getElementById("elDisponibilita").textContent = PRODOTTO.disponibilita || "";
+      document.getElementById("elSpedizione").textContent = PRODOTTO.spedizione || "";
+      document.getElementById("elLuogo").textContent = PRODOTTO.luogoOggetto || "";
+      document.getElementById("elRestituzione").textContent = PRODOTTO.restituzione || "";
+
+      const elDetRest = document.getElementById("elDettagliRestituzione");
+      elDetRest.textContent = PRODOTTO.dettagliRestituzione || "";
+      elDetRest.style.display = PRODOTTO.dettagliRestituzione ? "block" : "none";
+
+      // Metodi di pagamento (iconițe reale colorate SVG)
+      const PAY_ICONS = {
+        "paypal": `<svg viewBox="0 0 48 30" aria-label="PayPal"><rect x="0.5" y="0.5" width="47" height="29" rx="4" fill="#fff" stroke="#d9d9d9"/><path d="M20.4 7.5h-5.6c-.4 0-.7.3-.8.7l-2.3 14.3c0 .3.2.5.5.5h2.7c.4 0 .7-.3.8-.7l.6-3.9c.1-.4.4-.7.8-.7h1.8c3.7 0 5.9-1.8 6.4-5.4.3-1.6 0-2.8-.7-3.6-.8-.8-2.2-1.2-4.2-1.2zm.6 5c-.3 2-1.8 2-3.3 2h-.8l.6-3.7c0-.2.2-.4.5-.4h.4c1 0 1.9 0 2.4.6.3.3.4.8.2 1.5z" fill="#003087"/><path d="M34.2 12.4h-2.7c-.2 0-.4.2-.5.4l-.1.8-.2-.3c-.6-.8-1.9-1.1-3.2-1.1-3 0-5.5 2.3-6 5.4-.3 1.6.1 3.1 1 4.1.8 1 2 1.4 3.4 1.4 2.4 0 3.7-1.5 3.7-1.5l-.1.8c0 .3.2.5.5.5h2.4c.4 0 .7-.3.8-.7l1.5-9.3c0-.3-.2-.5-.5-.5zm-3.7 5.3c-.3 1.5-1.5 2.6-3 2.6-.8 0-1.4-.2-1.8-.7-.4-.5-.5-1.1-.4-1.9.2-1.5 1.5-2.6 3-2.6.8 0 1.4.3 1.8.7.4.5.5 1.2.4 1.9z" fill="#0079C1"/></svg>`,
+        "apple pay": `<svg viewBox="0 0 48 30" aria-label="Apple Pay"><rect x="0.5" y="0.5" width="47" height="29" rx="4" fill="#fff" stroke="#d9d9d9"/><path d="M15.8 10.6c.4-.5.7-1.2.6-1.9-.6 0-1.4.4-1.8.9-.4.4-.7 1.2-.6 1.8.7.1 1.4-.3 1.8-.8zm.6 1c-1-.1-1.9.6-2.3.6-.5 0-1.2-.5-2-.5-1 0-2 .6-2.5 1.5-1.1 1.8-.3 4.6.7 6.1.5.7 1.1 1.5 1.9 1.5.8 0 1-.5 2-.5.9 0 1.2.5 2 .5.8 0 1.3-.7 1.8-1.5.6-.8.8-1.6.8-1.7 0 0-1.6-.6-1.6-2.4 0-1.5 1.2-2.2 1.3-2.3-.7-1-1.8-1.2-2.1-1.2z" fill="#191919"/><path d="M24.6 9.8c1.9 0 3.2 1.3 3.2 3.2 0 1.9-1.3 3.2-3.3 3.2h-2.1v3.4h-1.5V9.8h3.7zm-2.2 5.2h1.7c1.3 0 2.1-.7 2.1-1.9 0-1.2-.8-1.9-2.1-1.9h-1.7V15zm6.3 2.6c0-1.2.9-2 2.6-2.1l1.9-.1v-.5c0-.8-.5-1.2-1.4-1.2-.8 0-1.3.4-1.4.9h-1.4c.1-1.2 1.2-2.1 2.9-2.1 1.7 0 2.8.9 2.8 2.3v4.8h-1.4v-1.1h0c-.4.8-1.3 1.2-2.2 1.2-1.4 0-2.4-.8-2.4-2.1zm4.5-.6v-.6l-1.7.1c-.9.1-1.4.4-1.4 1 0 .6.5 1 1.3 1 1 0 1.8-.6 1.8-1.5zm3 4.8v-1.1c.1 0 .4.1.6.1.6 0 .9-.3 1.1-.9l.1-.4-2.6-7.1h1.6l1.8 5.6h0l1.8-5.6h1.5l-2.7 7.5c-.6 1.7-1.3 2.2-2.7 2.2-.2 0-.4 0-.5-.1z" fill="#191919"/></svg>`,
+        "google pay": `<svg viewBox="0 0 54 30" aria-label="Google Pay"><rect x="0.5" y="0.5" width="53" height="29" rx="4" fill="#fff" stroke="#d9d9d9"/><path d="M24.8 15.2v3.9h-1.2V9.5h3.3c.8 0 1.5.3 2.1.8.6.5.9 1.2.9 2s-.3 1.5-.9 2c-.6.5-1.3.8-2.1.8h-2.1zm0-4.5v3.3h2.1c.5 0 .9-.2 1.2-.5.3-.3.5-.7.5-1.2 0-.4-.2-.8-.5-1.2-.3-.3-.7-.5-1.2-.5h-2.1zm7.9 1.6c.9 0 1.6.2 2.1.7.5.5.8 1.1.8 2v4.1h-1.2v-.9h-.1c-.5.7-1.2 1.1-2 1.1-.7 0-1.3-.2-1.8-.6-.5-.4-.7-1-.7-1.6 0-.7.3-1.2.8-1.6.5-.4 1.2-.6 2-.6.7 0 1.3.1 1.8.4v-.3c0-.4-.2-.8-.5-1.1-.3-.3-.7-.4-1.2-.4-.7 0-1.2.3-1.6.9l-1.1-.7c.6-.9 1.5-1.4 2.7-1.4zm-1.6 4.8c0 .3.1.6.4.8.3.2.6.3 1 .3.5 0 1-.2 1.4-.6.4-.4.6-.8.6-1.3-.4-.3-.9-.5-1.6-.5-.5 0-.9.1-1.3.4-.3.2-.5.5-.5.9zm11.8-4.6l-4.1 9.5h-1.3l1.5-3.3-2.7-6.2h1.4l1.9 4.7h0l1.9-4.7h1.4z" fill="#3C4043"/><path d="M18.9 14.5c0-.4 0-.7-.1-1.1h-5v2h2.9c-.1.7-.5 1.2-1 1.6v1.3h1.7c1-.9 1.5-2.2 1.5-3.8z" fill="#4285F4"/><path d="M13.8 19.7c1.4 0 2.6-.5 3.5-1.3l-1.7-1.3c-.5.3-1.1.5-1.8.5-1.4 0-2.5-.9-3-2.2H9.1v1.4c.9 1.7 2.7 2.9 4.7 2.9z" fill="#34A853"/><path d="M10.8 15.4c-.2-.6-.2-1.3 0-1.9v-1.4H9.1c-.7 1.4-.7 3.2 0 4.6l1.7-1.3z" fill="#FBBC05"/><path d="M13.8 11.3c.8 0 1.5.3 2 .8l1.5-1.5c-.9-.9-2.2-1.4-3.5-1.4-2 0-3.8 1.2-4.7 2.9l1.7 1.4c.5-1.3 1.6-2.2 3-2.2z" fill="#EA4335"/></svg>`,
+        "visa": `<svg viewBox="0 0 48 30" aria-label="Visa"><rect x="0.5" y="0.5" width="47" height="29" rx="4" fill="#fff" stroke="#d9d9d9"/><path d="M20.3 19.6h-2.5l1.6-9.6h2.5l-1.6 9.6zm10.4-9.4c-.5-.2-1.3-.4-2.2-.4-2.5 0-4.2 1.3-4.2 3.1 0 1.4 1.2 2.1 2.2 2.6 1 .5 1.3.8 1.3 1.2 0 .6-.8.9-1.5.9-1 0-1.5-.1-2.3-.5l-.3-.2-.3 2.1c.6.3 1.7.5 2.8.5 2.6 0 4.3-1.3 4.3-3.2 0-1.1-.7-1.9-2.1-2.6-.9-.4-1.4-.7-1.4-1.2 0-.4.4-.8 1.4-.8.8 0 1.4.2 1.8.4l.2.1.3-2zm6.4-.2h-1.9c-.6 0-1 .2-1.3.8l-3.7 8.8h2.6l.5-1.4h3.2l.3 1.4h2.3l-2-9.6zm-3 6.2l1.3-3.6.7 3.6h-2zM16.5 10l-2.4 6.6-.3-1.3c-.4-1.5-1.8-3.1-3.4-3.9l2.2 8.2h2.6l3.9-9.6h-2.6z" fill="#1434CB"/><path d="M11.8 10H7.8l-.1.2c3.1.8 5.2 2.7 6 5l-.9-4.4c-.1-.6-.6-.8-1-.8z" fill="#F79E1B"/></svg>`,
+        "mastercard": `<svg viewBox="0 0 48 30" aria-label="Mastercard"><rect x="0.5" y="0.5" width="47" height="29" rx="4" fill="#fff" stroke="#d9d9d9"/><rect x="20.4" y="8.8" width="7.2" height="12.4" fill="#FF5F00"/><path d="M20.9 15c0-2.5 1.2-4.8 3.1-6.2-1.4-1.1-3.1-1.7-5-1.7-4.4 0-8 3.5-8 7.9s3.6 7.9 8 7.9c1.9 0 3.6-.6 5-1.7-1.9-1.4-3.1-3.7-3.1-6.2z" fill="#EB001B"/><path d="M37 15c0 4.4-3.6 7.9-8 7.9-1.9 0-3.6-.6-5-1.7 1.9-1.4 3.1-3.7 3.1-6.2s-1.2-4.8-3.1-6.2c1.4-1.1 3.1-1.7 5-1.7 4.4 0 8 3.5 8 7.9z" fill="#F79E1B"/></svg>`
+      };
+
+      const pagamentiEl = document.getElementById("elPagamenti");
+      if (Array.isArray(PRODOTTO.pagamenti) && PRODOTTO.pagamenti.length > 0) {
+        PRODOTTO.pagamenti.forEach(metodo => {
+          const key = String(metodo || "").trim().toLowerCase();
+          if (PAY_ICONS[key]) {
+            const iconWrap = document.createElement("span");
+            iconWrap.className = "vi-pay-icon";
+            iconWrap.title = metodo;
+            iconWrap.innerHTML = PAY_ICONS[key];
+            pagamentiEl.appendChild(iconWrap);
+          } else {
+            const pill = document.createElement("span");
+            pill.className = "vi-pay-pill";
+            pill.textContent = metodo;
+            pagamentiEl.appendChild(pill);
+          }
+        });
+      } else {
+        document.getElementById("elPagamentiRow").style.display = "none";
+      }
+
+      // Garanzia cliente eBay
+      if (PRODOTTO.garanzia && PRODOTTO.garanzia.trim() !== "") {
+        document.getElementById("elGaranziaEbay").textContent = PRODOTTO.garanzia;
+      } else {
+        document.getElementById("elGaranziaRow").style.display = "none";
+      }
+
+      document.getElementById("elDescrizione").textContent = PRODOTTO.descrizione || "";
+
+      // Popola specifiche
+      const specsEl = document.getElementById("elSpecifiche");
+      (PRODOTTO.specifiche || []).forEach(spec => {
+        const row = document.createElement("div");
+        row.className = "vi-spec-row";
+        const lbl = document.createElement("span");
+        lbl.className = "vi-spec-label";
+        lbl.textContent = spec.nome || "";
+        const val = document.createElement("span");
+        val.className = "vi-spec-value";
+        val.textContent = spec.valore || "";
+        row.appendChild(lbl);
+        row.appendChild(val);
+        specsEl.appendChild(row);
+      });
+
+      // Galleria immagini
+      const mainImgEl = document.getElementById("elMainImg");
+      const thumbsColEl = document.getElementById("elThumbsCol");
+      const counterEl = document.getElementById("elImgCounter");
+      const prevBtn = document.getElementById("btnPrevImg");
+      const nextBtn = document.getElementById("btnNextImg");
+
+      function updateGallery() {
+        mainImgEl.src = images[currentIdx];
+        counterEl.textContent = `${currentIdx + 1} / ${images.length}`;
+        prevBtn.style.display = images.length > 1 ? "flex" : "none";
+        nextBtn.style.display = images.length > 1 ? "flex" : "none";
+
+        thumbsColEl.innerHTML = "";
+        images.forEach((src, i) => {
+          const btn = document.createElement("button");
+          btn.type = "button";
+          btn.className = "vi-thumb-btn" + (i === currentIdx ? " active" : "");
+          const img = document.createElement("img");
+          img.src = src;
+          img.alt = `Miniatura ${i + 1}`;
+          btn.appendChild(img);
+          btn.addEventListener("click", () => {
+            currentIdx = i;
+            updateGallery();
+          });
+          thumbsColEl.appendChild(btn);
+        });
+      }
+
+      prevBtn.addEventListener("click", () => {
+        currentIdx = (currentIdx - 1 + images.length) % images.length;
+        updateGallery();
+      });
+
+      nextBtn.addEventListener("click", () => {
+        currentIdx = (currentIdx + 1) % images.length;
+        updateGallery();
+      });
+
+      updateGallery();
+
+      // Badge, inimioară, fullscreen
+      const viewsEl = document.getElementById("elViews");
+      if (PRODOTTO.visualizzazioniOggi !== "" && PRODOTTO.visualizzazioniOggi != null) viewsEl.textContent = "Visualizzazioni di oggi: " + PRODOTTO.visualizzazioniOggi;
+      else viewsEl.style.display = "none";
+      let likes = Number(PRODOTTO.osservatori) || 0, liked = false;
+      const likesEl = document.getElementById("elLikes"), heartBtn = document.getElementById("btnHeart");
+      likesEl.textContent = likes;
+      heartBtn.addEventListener("click", () => { liked = !liked; likes += liked ? 1 : -1; likesEl.textContent = likes; heartBtn.classList.toggle("on", liked); });
+      const lb = document.getElementById("elLightbox");
+      document.getElementById("btnExpand").addEventListener("click", () => { document.getElementById("elLbImg").src = images[currentIdx]; lb.hidden = false; });
+      document.getElementById("btnLbClose").addEventListener("click", () => { lb.hidden = true; });
+      document.addEventListener("keydown", e => {
+        if (e.key === "Escape") { lb.hidden = true; condModal.hidden = true; }
+        if (e.key === "ArrowLeft") prevBtn.click();
+        if (e.key === "ArrowRight") nextBtn.click();
+      });
+
+      // Ritiro / Consegna / osservatori
+      [["elRitiro", "ritiro", "elRitiroRow"], ["elConsegna", "consegna", "elConsegnaRow"]].forEach(([id, k, row]) => {
+        if (PRODOTTO[k]) document.getElementById(id).textContent = PRODOTTO[k];
+        else document.getElementById(row).style.display = "none";
+      });
+      if (PRODOTTO.altriOsservano) {
+        const w = document.getElementById("elWatchers"), parts = PRODOTTO.altriOsservano.split(". ");
+        const b = document.createElement("b"); b.textContent = parts[0] + (parts.length > 1 ? "." : "");
+        w.appendChild(b); w.appendChild(document.createTextNode(" " + parts.slice(1).join(". ")));
+        w.hidden = false;
+      }
+
+      // Numero oggetto (în specificații)
+      if (PRODOTTO.numeroOggetto) {
+        const n = document.createElement("div");
+        n.className = "vi-spec-num";
+        n.textContent = "Numero oggetto: " + PRODOTTO.numeroOggetto;
+        specsEl.parentNode.insertBefore(n, specsEl.previousElementSibling);
+      }
+
+      // Venditore + feedback
+      const vi = PRODOTTO.venditoreInfo || {};
+      document.getElementById("elSsInitial").textContent = (PRODOTTO.venditore || "V").charAt(0).toUpperCase();
+      document.getElementById("elSsName").textContent = PRODOTTO.venditore || "";
+      document.getElementById("elSsSub").textContent = [vi.feedbackPct, vi.oggettiVenduti].filter(Boolean).join(" · ");
+      document.getElementById("elSsDal").textContent = vi.dal || "";
+      document.getElementById("elSsNota").textContent = vi.nota || "";
+      document.getElementById("elFbCount").textContent = vi.valutazioni ? "(" + vi.valutazioni + ")" : "";
+      const fbAllLink = document.getElementById("elFbAllLink");
+      if (fbAllLink) fbAllLink.href = (PRODOTTO.linkFeedback && PRODOTTO.linkFeedback.trim()) || "#";
+      const fbList = document.getElementById("elFbList");
+      (PRODOTTO.feedback || []).forEach(f => {
+        const it = document.createElement("div"); it.className = "vi-fb-item";
+        const m = document.createElement("div"); m.className = "vi-fb-meta";
+        const ic = document.createElement("i"); ic.textContent = "+";
+        m.appendChild(ic);
+        m.appendChild(document.createTextNode([f.utente, f.quando].filter(Boolean).join(" · ") + (f.verificato ? "   Acquisto verificato" : "")));
+        const p = document.createElement("p"); p.textContent = f.testo || "";
+        const l = document.createElement("div"); l.className = "vi-fb-item-link"; l.textContent = f.oggetto || "";
+        it.append(m, p, l); fbList.appendChild(it);
+      });
+      if (!(PRODOTTO.feedback || []).length) document.querySelector(".vi-seller-section .vi-ss-col:last-child").style.display = "none";
+
+      // Footer
+      const ft = PRODOTTO.footer || {};
+      const links = (id, arr) => (arr || []).forEach(t => { const a = document.createElement("a"); a.href = "#"; a.textContent = t; document.getElementById(id).appendChild(a); });
+      links("elFtRighe", ft.righe); links("elFtCompatto", ft.compatto);
+      const lg = document.getElementById("elFtLegale");
+      lg.appendChild(document.createTextNode("Copyright © " + new Date().getFullYear() + " " + (PRODOTTO.nomeSito || "") + ". Tutti i diritti riservati. "));
+      (ft.legale || []).forEach((t, i) => { const a = document.createElement("a"); a.href = "#"; a.textContent = t; lg.appendChild(a); if (i < ft.legale.length - 1) lg.appendChild(document.createTextNode(", ")); });
+    }
+    __init();
+  </script>
+</body>
+</html>
