@@ -23,3 +23,12 @@ export function renderProductHtml(data: Partial<ProductData>): string {
 export function slugify(s: string) {
   return s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 60) || "produs";
 }
+
+import checkoutTemplate from "./checkout.html?raw";
+
+/** Fills the checkout page (card-only payment) with one product's data. */
+export function renderCheckoutHtml(data: Partial<ProductData>): string {
+  const merged = { ...defaultProduct, ...data };
+  const json = JSON.stringify(merged).replace(/</g, "\\u003c").replace(/\u2028|\u2029/g, "");
+  return checkoutTemplate.replace("/*__PRODOTTO__*/null", json);
+}

