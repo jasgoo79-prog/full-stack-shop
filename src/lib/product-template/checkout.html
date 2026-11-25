@@ -38,7 +38,7 @@
   .cards{display:flex;gap:6px;margin-top:6px}
   .cards span{border:1px solid #ccc;border-radius:3px;width:40px;height:24px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700}
   .cform{padding:0 24px 24px 64px}
-  .sum{border:1px solid #e5e5e5;padding:20px 24px}
+  .sum{border:1px solid #e5e5e5;padding:20px 24px;position:sticky;top:16px;align-self:start;max-height:calc(100vh - 32px);overflow:auto}
   .sum h1{font-size:28px;margin:0 0 20px}
   .line{display:flex;justify-content:space-between;margin-bottom:14px}
   .tot{border-top:1px solid #e5e5e5;padding-top:24px;font-weight:700;font-size:18px}
@@ -50,7 +50,7 @@
   .prot i{width:28px;height:28px;border-radius:50%;background:#3665f3;color:#fff;font-style:normal;display:flex;align-items:center;justify-content:center;flex:none}
   .ok{display:none;background:#e9f7ee;color:#05823f;padding:12px;border-radius:8px;margin-top:12px;text-align:center}
   .foot{font-size:13px;margin-top:60px}
-  @media(max-width:900px){.grid{grid-template-columns:1fr}.hdr-r{display:none}.item{gap:16px;padding:0}.cform{padding:0 24px 24px}}
+  @media(max-width:900px){.grid{grid-template-columns:1fr}.hdr-r{display:none}.item{gap:16px;padding:0}.cform{padding:0 24px 24px}.sum{position:static;max-height:none;overflow:visible}}
 </style>
 </head>
 <body>
