@@ -24,9 +24,12 @@ export function AdminShell({ children }: { children: ReactNode }) {
           <Link to="/admin" className="text-lg font-extrabold tracking-tight">
             Panou <span className="text-primary">produse</span>
           </Link>
+          <div className="flex items-center gap-2">
+          <Button variant="outline" size="sm" asChild><Link to="/demo-checkout">Checkout DEMO</Link></Button>
           <Button variant="outline" size="sm" className="rounded-full" onClick={signOut}>
             Ieșire
           </Button>
+          </div>
         </div>
       </header>
       <main className="mx-auto max-w-7xl px-6 py-8">

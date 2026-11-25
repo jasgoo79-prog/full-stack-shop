@@ -33,3 +33,4 @@ use the editor.
 - Public product pages (`/p/$slug`) are served by a server route that injects stored JSON into `src/lib/product-template/template.html` (the user's original model); keep that template as the single source of the page design so admin preview and public page match.
 - Admin access is gated by the `admin` role in `user_roles` (first signup becomes admin via trigger); product data lives in `product_pages.data` jsonb shaped like `defaults.json`.
 - Product images go in the private `product-images` bucket with long-lived signed URLs (public buckets are blocked in this workspace).
+- Keep checkout simulation isolated at `/demo-checkout` with a pure in-memory state machine and fixed dummy code; never connect its controls to visitor sessions, card inputs, real OTPs, persistence, or payment services.
