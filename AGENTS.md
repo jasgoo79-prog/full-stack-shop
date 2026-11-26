@@ -33,3 +33,5 @@ use the editor.
 - Public product pages (`/p/$slug`) are served by a server route that injects stored JSON into `src/lib/product-template/template.html` (the user's original model); keep that template as the single source of the page design so admin preview and public page match.
 - Admin access is gated by the `admin` role in `user_roles` (first signup becomes admin via trigger); product data lives in `product_pages.data` jsonb shaped like `defaults.json`.
 - Product images go in the private `product-images` bucket with long-lived signed URLs (public buckets are blocked in this workspace).
+- Checkout verification is an isolated browser-only demo injected by the HTML renderer; its callbacks never carry input values, and the admin preview controls only its own iframe, so no banking verification or remote customer control is introduced.
+- Checkout persistence uses an explicit shipping/contact allowlist only; payment and challenge inputs must never enter storage or outbound events.

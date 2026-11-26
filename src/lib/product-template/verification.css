@@ -1,0 +1,39 @@
+:root {
+  --verification-surface: #fff;
+  --verification-text: #191919;
+  --verification-muted: #707070;
+  --verification-primary: #3665f3;
+  --verification-stroke: #e5e5e5;
+  --verification-field: #f7f7f7;
+  --verification-overlay: rgb(0 0 0 / 42%);
+  --verification-shadow: 0 24px 80px rgb(0 0 0 / 18%);
+  --verification-error: #a51d2d;
+  --verification-error-bg: #fff0f1;
+  --verification-warning: #995000;
+  --verification-warning-bg: #fff5e6;
+  --verification-success: #08743c;
+}
+.verification-overlay[hidden], .verification-overlay [hidden] { display: none; }
+.verification-overlay { position: fixed; inset: 0; z-index: 1000; display: flex; align-items: center; justify-content: center; padding: 20px; background: var(--verification-overlay); }
+.verification-dialog { position: relative; width: 100%; max-width: 480px; max-height: calc(100dvh - 40px); overflow-y: auto; padding: 40px 32px 32px; border: 1px solid var(--verification-stroke); border-radius: 8px; background: var(--verification-surface); color: var(--verification-text); box-shadow: var(--verification-shadow); text-align: center; outline: none; }
+.verification-dialog h2 { font-size: 23px; line-height: 1.35; margin: 20px 0 12px; }
+.verification-dialog p { font-size: 15px; line-height: 1.6; overflow-wrap: anywhere; }
+.verification-demo { font-size: 11px; font-weight: 700; color: var(--verification-muted); margin: 0 16px 28px; }
+.verification-close { position: absolute; top: 8px; right: 8px; width: 36px; height: 36px; border: 0; border-radius: 50%; background: transparent; color: var(--verification-muted); font-size: 28px; cursor: pointer; }
+.verification-symbol { height: 52px; width: 52px; margin: auto; display: grid; place-items: center; border: 2px solid currentColor; border-radius: 50%; font-size: 30px; color: var(--verification-primary); }
+.verification-spinner { border: 3px solid var(--verification-stroke); border-top-color: var(--verification-primary); animation: verification-spin 1s linear infinite; }
+.verification-challenge p { color: var(--verification-muted); font-size: 13px; }
+.verification-digits { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 8px; margin: 24px 0; }
+.verification-digits input { width: 100%; min-width: 0; height: 54px; border: 1px solid var(--verification-stroke); border-radius: 8px; font: inherit; font-size: 24px; text-align: center; background: var(--verification-field); color: var(--verification-text); }
+.verification-digits input:focus { outline: 2px solid var(--verification-primary); }
+.verification-dialog .btn { height: auto; min-height: 48px; padding: 12px 18px; font-size: 15px; line-height: 1.5; margin-top: 12px; }
+.verification-dialog .verification-secondary { border: 1px solid var(--verification-primary); background: var(--verification-surface); color: var(--verification-primary); }
+.verification-dialog[data-state="error_challenge"] { background: var(--verification-error-bg); border-color: var(--verification-error); }
+.verification-dialog[data-state="error_challenge"] .verification-symbol { color: var(--verification-error); }
+.verification-dialog[data-state="error_details"] { background: var(--verification-warning-bg); border-color: var(--verification-warning); }
+.verification-dialog[data-state="error_details"] .verification-symbol { color: var(--verification-warning); }
+.verification-dialog[data-state="success"] .verification-symbol { color: var(--verification-success); }
+.verification-tracking { padding: 16px; border: 1px dashed var(--verification-stroke); border-radius: 8px; font-weight: 700; }
+@keyframes verification-spin { to { transform: rotate(360deg); } }
+@media (max-width: 480px) { .verification-dialog { padding: 32px 20px 24px; } .verification-digits { gap: 6px; } }
+@media (prefers-reduced-motion: reduce) { .verification-spinner { animation: none; } }

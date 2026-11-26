@@ -8,6 +8,7 @@ import { AdminShell } from "@/components/admin/AdminShell";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
+import { VerificationPreview } from "@/components/admin/VerificationPreview";
 
 export const Route = createFileRoute("/_authenticated/admin/")({
   head: () => ({
@@ -16,6 +17,8 @@ export const Route = createFileRoute("/_authenticated/admin/")({
       { name: "description", content: "Lista paginilor de produs create." },
       { property: "og:title", content: "Pagini de produs | Panou" },
       { property: "og:description", content: "Lista paginilor de produs create." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: AdminList,
@@ -58,7 +61,8 @@ function AdminList() {
     <AdminShell>
       <div className="flex flex-wrap items-center justify-between gap-4">
         <h1 className="text-2xl font-bold">Pagini de produs</h1>
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2">
+          <VerificationPreview />
           <Input placeholder="Caută…" value={q} onChange={(e) => setQ(e.target.value)} className="w-56 rounded-full bg-card" />
           <Button asChild className="rounded-full">
             <Link to="/admin/produse/$id" params={{ id: "nou" }}><Plus /> Pagină nouă</Link>

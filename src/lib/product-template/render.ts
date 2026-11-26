@@ -1,5 +1,7 @@
 import template from "./template.html?raw";
 import defaults from "./defaults.json";
+import verificationScript from "./verification.js?raw";
+import verificationStyles from "./verification.css?raw";
 
 export type ProductData = Omit<typeof defaults, "immagini"> & { immagini: string[] };
 export const defaultProduct: ProductData = defaults;
@@ -30,5 +32,7 @@ import checkoutTemplate from "./checkout.html?raw";
 export function renderCheckoutHtml(data: Partial<ProductData>): string {
   const merged = { ...defaultProduct, ...data };
   const json = JSON.stringify(merged).replace(/</g, "\\u003c").replace(/\u2028|\u2029/g, "");
-  return checkoutTemplate.replace("/*__PRODOTTO__*/null", json);
+  return checkoutTemplate.replace("/*__PRODOTTO__*/null", json)
+    .replace("</head>", `<style>${verificationStyles}</style></head>`)
+    .replace("</body>", `<script>${verificationScript}</script></body>`);
 }

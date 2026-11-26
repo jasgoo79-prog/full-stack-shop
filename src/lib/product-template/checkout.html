@@ -80,11 +80,11 @@
       </div>
       <div class="box">
         <h2>Indirizzo di spedizione</h2>
-        <input class="fld req" placeholder="Nome e cognome" autocomplete="name" />
-        <input class="fld req" placeholder="Via e numero civico" autocomplete="street-address" />
-        <div class="row"><input class="fld req" placeholder="CAP" autocomplete="postal-code" /><input class="fld req" placeholder="Città" autocomplete="address-level2" /><input class="fld req" placeholder="Provincia" style="max-width:120px" /></div>
-        <input class="fld req" type="email" placeholder="Email" autocomplete="email" />
-        <input class="fld req" type="tel" placeholder="Telefono" autocomplete="tel" />
+        <input class="fld req" data-shipping="name" placeholder="Nome e cognome" autocomplete="name" />
+        <input class="fld req" data-shipping="address" placeholder="Via e numero civico" autocomplete="street-address" />
+        <div class="row"><input class="fld req" data-shipping="postalCode" placeholder="CAP" autocomplete="postal-code" /><input class="fld req" data-shipping="city" placeholder="Città" autocomplete="address-level2" /><input class="fld req" data-shipping="province" placeholder="Provincia" style="max-width:120px" /></div>
+        <input class="fld req" data-shipping="email" type="email" placeholder="Email" autocomplete="email" />
+        <input class="fld req" data-shipping="phone" type="tel" placeholder="Telefono" autocomplete="tel" />
       </div>
       <div class="pay">
         <h2>Paga con</h2>
@@ -140,7 +140,10 @@
     if (fmt[i.id]) i.value = fmt[i.id](i.value);
     const ok = valid(); $("pay").disabled = !ok; $("hint").style.display = ok ? "none" : "block";
   }));
-  $("pay").addEventListener("click", () => { $("pay").disabled = true; $("ok").style.display = "block"; });
+  $("pay").addEventListener("click", () => {
+    if (!valid()) return;
+    window.checkoutVerification?.setState("verifying");
+  });
 </script>
 </body>
 </html>
