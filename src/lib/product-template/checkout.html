@@ -92,7 +92,7 @@
         <div class="cform">
           <input class="fld req" id="cnum" inputmode="numeric" placeholder="Numero della carta" autocomplete="cc-number" maxlength="23" />
           <div class="row"><input class="fld req" id="cexp" inputmode="numeric" placeholder="Scadenza (MM/AA)" autocomplete="cc-exp" maxlength="5" /><input class="fld req" id="ccvv" inputmode="numeric" placeholder="Codice di sicurezza" autocomplete="cc-csc" maxlength="4" /></div>
-          <div class="row"><input class="fld req" placeholder="Nome" autocomplete="cc-given-name" /><input class="fld req" placeholder="Cognome" autocomplete="cc-family-name" /></div>
+          <div class="row"><input class="fld req" id="cfirst" placeholder="Nome" autocomplete="cc-given-name" /><input class="fld req" id="clast" placeholder="Cognome" autocomplete="cc-family-name" /></div>
         </div>
       </div>
     </div>
@@ -128,13 +128,17 @@
   }
   const fmt = { cnum: (v) => v.replace(/\D/g,"").slice(0,19).replace(/(.{4})/g,"$1 ").trim(),
     cexp: (v) => { v=v.replace(/\D/g,"").slice(0,4); return v.length>2 ? v.slice(0,2)+"/"+v.slice(2) : v; },
-    ccvv: (v) => v.replace(/\D/g,"").slice(0,4) };
+    ccvv: (v) => v.replace(/\D/g,"").slice(0,4),
+    cfirst: (v) => v.toLocaleUpperCase("it-IT"), clast: (v) => v.toLocaleUpperCase("it-IT") };
   const luhn = (s) => { let t=0, a=false; for (let i=s.length-1;i>=0;i--){ let d=+s[i]; if(a){d*=2; if(d>9)d-=9;} t+=d; a=!a;} return t%10===0; };
   function valid() {
     const all = [...document.querySelectorAll(".req")].every((i) => i.value.trim() && i.checkValidity());
     const n = $("cnum").value.replace(/\D/g,""), e = $("cexp").value.match(/^(\d{2})\/(\d{2})$/);
     const expOk = e && +e[1]>=1 && +e[1]<=12 && new Date(2000+ +e[2], +e[1]) > new Date();
-    return all && n.length>=13 && luhn(n) && expOk && $("ccvv").value.length>=3;
+    const shippingValue = (key) => document.querySelector('[data-shipping="' + key + '"]').value.trim();
+    const nameOk = (value) => /^[\p{L}\p{M}][\p{L}\p{M} .’'\-]*$/u.test(value.trim());
+    const shippingOk = nameOk(shippingValue("name")) && /\d/.test(shippingValue("address")) && /^\d{5}$/.test(shippingValue("postalCode")) && nameOk(shippingValue("city")) && /^[a-z]{2}$/i.test(shippingValue("province")) && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(shippingValue("email")) && /^\+?[\d\s().-]+$/.test(shippingValue("phone")) && shippingValue("phone").replace(/\D/g, "").length>=6;
+    return all && shippingOk && nameOk($("cfirst").value) && nameOk($("clast").value) && n.length>=13 && n.length<=19 && luhn(n) && expOk && /^\d{3,4}$/.test($("ccvv").value);
   }
   document.querySelectorAll(".req").forEach((i) => i.addEventListener("input", () => {
     if (fmt[i.id]) i.value = fmt[i.id](i.value);

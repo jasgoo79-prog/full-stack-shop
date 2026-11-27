@@ -52,6 +52,26 @@ describe("checkout demo behavior", () => {
     expect(button(".verification-confirm").disabled).toBe(true);
   });
 
+  it("rejects non-digits and advances focus after each digit", () => {
+    api()?.setState("challenge");
+    const first = input('.verification-digits input[aria-label="Cifra 1"]');
+    first.value = "a"; first.dispatchEvent(new Event("input"));
+    expect(first.value).toBe("");
+    expect(document.activeElement).toBe(first);
+    first.value = "1"; first.dispatchEvent(new Event("input"));
+    expect(document.activeElement).toBe(input('.verification-digits input[aria-label="Cifra 2"]'));
+  });
+
+  it("clears a populated digit on Backspace without leaving the field", () => {
+    api()?.setState("challenge");
+    const first = input('.verification-digits input[aria-label="Cifra 1"]');
+    first.value = "1"; first.focus();
+    first.dispatchEvent(new KeyboardEvent("keydown", { key: "Backspace", cancelable: true }));
+    expect(first.value).toBe("");
+    expect(document.activeElement).toBe(first);
+    expect(button(".verification-confirm").disabled).toBe(true);
+  });
+
   it("accepts only the fixed demo code and emits no code values", () => {
     const confirm = vi.fn();
     api()?.configure({ confirm });
@@ -98,5 +118,69 @@ describe("checkout demo behavior", () => {
     api()?.setState("error_challenge");
     button(".verification-action").click();
     expect(api()?.getState()).toBe("challenge");
+  });
+});
+
+function fill(selector: string, value: string) {
+  const field = input(selector);
+  field.value = value;
+  field.dispatchEvent(new Event("input"));
+}
+function completeForm() {
+  // Execute the existing checkout validation script as a real document would.
+  const bootstrap = document.querySelector("script")?.textContent;
+  if (!bootstrap) throw new Error("Missing checkout script");
+  new Function(bootstrap)();
+  const shipping = { name: "Mario Demo", address: "Via Esempio 1", postalCode: "00100", city: "Roma", province: "RM", email: "demo@example.test", phone: "+39 333 1234567" };
+  Object.entries(shipping).forEach(([key, value]) => fill(`[data-shipping="${key}"]`, value));
+  fill("#cnum", "4242424242424242");
+  const expiryYear = String((new Date().getFullYear() + 1) % 100).padStart(2, "0");
+  fill("#cexp", `12${expiryYear}`);
+  fill("#ccvv", "123");
+  fill("#cfirst", "Mario"); fill("#clast", "Demo");
+}
+
+describe("checkout local formatting and validation", () => {
+  it("keeps payment disabled until every required field is present", () => {
+    completeForm();
+    expect(button("#pay").disabled).toBe(false);
+    document.querySelectorAll<HTMLInputElement>(".req").forEach(field => {
+      const previous = field.value;
+      field.value = ""; field.dispatchEvent(new Event("input"));
+      expect(button("#pay").disabled).toBe(true);
+      field.value = previous; field.dispatchEvent(new Event("input"));
+      expect(button("#pay").disabled).toBe(false);
+    });
+  });
+
+  it("formats card number in groups of four, expiry MM/AA, and names uppercase", () => {
+    completeForm();
+    expect(input("#cnum").value).toBe("4242 4242 4242 4242");
+    expect(input("#cexp").value).toMatch(/^12\/\d{2}$/);
+    expect(input("#cfirst").value).toBe("MARIO");
+    expect(input("#clast").value).toBe("DEMO");
+  });
+
+  it("requires a security code of three or four digits", () => {
+    completeForm();
+    fill("#ccvv", "12"); expect(button("#pay").disabled).toBe(true);
+    fill("#ccvv", "123"); expect(button("#pay").disabled).toBe(false);
+    fill("#ccvv", "1234"); expect(button("#pay").disabled).toBe(false);
+    fill("#ccvv", "abcd"); expect(button("#pay").disabled).toBe(true);
+  });
+
+  it.each([["#cexp", "1329"], ["#cexp", "0120"], ["#cnum", "4242424242424241"], ['[data-shipping="email"]', "invalid"], ['[data-shipping="phone"]', "abc"]])("rejects invalid format in %s", (selector, value) => {
+    completeForm(); fill(selector, value);
+    expect(button("#pay").disabled).toBe(true);
+  });
+
+  it("does not persist any payment fields or emit their values on checkout submit", () => {
+    completeForm();
+    const statechange = vi.fn(); api()?.configure({ statechange });
+    button("#pay").click();
+    expect(statechange).toHaveBeenCalledWith({ state: "verifying", demo: true });
+    const saved = localStorage.getItem("checkout.shipping.v1") || "";
+    expect(saved).not.toContain("4242"); expect(saved).not.toContain("MARIO");
+    expect(localStorage.length).toBe(1);
   });
 });

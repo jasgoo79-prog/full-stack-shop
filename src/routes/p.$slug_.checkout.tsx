@@ -4,6 +4,14 @@ import type { Database } from "@/integrations/supabase/types";
 import { renderCheckoutHtml, type ProductData } from "@/lib/product-template/render";
 
 export const Route = createFileRoute("/p/$slug_/checkout")({
+  head: () => ({ meta: [
+    { title: "Paga — demo | Panou produse" },
+    { name: "description", content: "Riepilogo ordine e checkout dimostrativo." },
+    { property: "og:title", content: "Paga — demo | Panou produse" },
+    { property: "og:description", content: "Riepilogo ordine e checkout dimostrativo." },
+    { property: "og:type", content: "website" },
+    { name: "twitter:card", content: "summary" },
+  ] }),
   server: {
     handlers: {
       GET: async ({ params }) => {

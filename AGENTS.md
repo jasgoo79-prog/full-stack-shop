@@ -35,3 +35,4 @@ use the editor.
 - Product images go in the private `product-images` bucket with long-lived signed URLs (public buckets are blocked in this workspace).
 - Checkout verification is an isolated browser-only demo injected by the HTML renderer; its callbacks never carry input values, and the admin preview controls only its own iframe, so no banking verification or remote customer control is introduced.
 - Checkout persistence uses an explicit shipping/contact allowlist only; payment and challenge inputs must never enter storage or outbound events.
+- The admin simulation table uses fixed fictional fixtures and value-free iframe callbacks; presence and active-column controls are manual demo states, never customer telemetry.

@@ -13,6 +13,8 @@ export const Route = createFileRoute("/auth")({
       { name: "description", content: "Intră în panoul de administrare." },
       { property: "og:title", content: "Autentificare | Panou produse" },
       { property: "og:description", content: "Intră în panoul de administrare." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: AuthPage,

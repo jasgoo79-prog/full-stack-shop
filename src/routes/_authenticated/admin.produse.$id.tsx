@@ -19,6 +19,8 @@ export const Route = createFileRoute("/_authenticated/admin/produse/$id")({
       { name: "description", content: "Editează pagina de produs." },
       { property: "og:title", content: "Editor pagină produs | Panou" },
       { property: "og:description", content: "Editează pagina de produs." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: Editor,

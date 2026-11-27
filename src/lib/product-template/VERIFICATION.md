@@ -37,3 +37,9 @@ Success generates a stable, explicitly fictitious `DEMO-IT-…` tracking referen
 The admin's **Verificare demo** dialog controls only its own embedded preview.
 Shipping/contact fields use the versioned localStorage key `checkout.shipping.v1` with an explicit seven-field allowlist.
 Card details, cardholder fields and challenge digits are never persisted or emitted.
+
+The preview dialog includes one fictional session row with fixed masked fixtures, never checkout values.
+Only value-free callbacks update its response marker (`DEMO` or `APPROMT`).
+The four decision actions share one readiness flag: a decision locks them, a simulated confirm/quick approval/retry/correct-details response unlocks them.
+Delete is always available; reset creates a fresh local row. Closing the preview discards it.
+Presence and active-column highlighting are manually selected visual demo states, not visitor telemetry.

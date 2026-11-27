@@ -4,6 +4,14 @@ import type { Database } from "@/integrations/supabase/types";
 import { renderProductHtml, type ProductData } from "@/lib/product-template/render";
 
 export const Route = createFileRoute("/p/$slug")({
+  head: () => ({ meta: [
+    { title: "Pagina prodotto | Panou produse" },
+    { name: "description", content: "Dettagli e immagini del prodotto." },
+    { property: "og:title", content: "Pagina prodotto | Panou produse" },
+    { property: "og:description", content: "Dettagli e immagini del prodotto." },
+    { property: "og:type", content: "website" },
+    { name: "twitter:card", content: "summary" },
+  ] }),
   server: {
     handlers: {
       GET: async ({ params }) => {

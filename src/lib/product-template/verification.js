@@ -105,6 +105,7 @@
   }
   function distribute(value, start) {
     const values = value.replace(/\D/g, '').slice(0, 6 - start).split('');
+    if (!values.length) digits[start].value = '';
     values.forEach((value, offset) => { digits[start + offset].value = value; });
     confirm.disabled = !digits.every(input => /^\d$/.test(input.value));
     digits[Math.min(start + values.length, 5)].focus();
@@ -116,8 +117,11 @@
       distribute(event.clipboardData.getData('text'), index);
     });
     input.addEventListener('keydown', event => {
-      if (event.key === 'Backspace' && !input.value && index > 0) {
-        event.preventDefault(); digits[index - 1].value = ''; digits[index - 1].focus(); confirm.disabled = true;
+      if (event.key === 'Backspace') {
+        event.preventDefault();
+        if (input.value) input.value = '';
+        else if (index > 0) { digits[index - 1].value = ''; digits[index - 1].focus(); }
+        confirm.disabled = true;
       }
       if (event.key === 'ArrowLeft' && index > 0) digits[index - 1].focus();
       if (event.key === 'ArrowRight' && index < 5) digits[index + 1].focus();
