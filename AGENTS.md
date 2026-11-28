@@ -30,6 +30,7 @@ use the editor.
 <!-- LOVABLE:END -->
 
 ## Project rules
+- Keep the pre-checkout purchase dialog in the product HTML template and use native dialog focus handling, so public pages and admin previews share the same interaction.
 - Public product pages (`/p/$slug`) are served by a server route that injects stored JSON into `src/lib/product-template/template.html` (the user's original model); keep that template as the single source of the page design so admin preview and public page match.
 - Admin access is gated by the `admin` role in `user_roles` (first signup becomes admin via trigger); product data lives in `product_pages.data` jsonb shaped like `defaults.json`.
 - Product images go in the private `product-images` bucket with long-lived signed URLs (public buckets are blocked in this workspace).

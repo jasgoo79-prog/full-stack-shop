@@ -36,6 +36,7 @@
 
       --shadow-subtle: 0 2px 8px rgba(0, 0, 0, 0.06);
       --shadow-medium: 0 4px 16px rgba(0, 0, 0, 0.10);
+      --color-purchase-backdrop: rgba(0, 0, 0, 0.48);
 
       --font-family-sans: "Market Sans", "Inter", -apple-system, BlinkMacSystemFont, "Helvetica Neue", "Segoe UI", Roboto, Arial, sans-serif;
     }
@@ -665,6 +666,30 @@
       background: var(--color-background-secondary);
     }
 
+    .vi-purchase-dialog {
+      width: min(480px, calc(100% - 32px));
+      max-height: calc(100dvh - 32px);
+      margin: auto;
+      padding: 24px;
+      border: 1px solid var(--color-stroke-subtle);
+      border-radius: var(--border-radius-50);
+      background: var(--color-background-elevated);
+      color: var(--color-foreground-primary);
+      box-shadow: var(--shadow-medium);
+      overflow: auto;
+      letter-spacing: 0;
+    }
+    .vi-purchase-dialog::backdrop { background: var(--color-purchase-backdrop); }
+    .vi-purchase-close-row { display: flex; justify-content: flex-end; margin-bottom: 16px; }
+    .vi-purchase-product { display: flex; align-items: flex-start; gap: 16px; text-align: left; margin-bottom: 28px; }
+    .vi-purchase-product img { width: 96px; height: 96px; flex: none; object-fit: contain; background: var(--color-background-secondary); border-radius: var(--border-radius-50); }
+    .vi-purchase-title { min-width: 0; font-size: 16px; font-weight: 600; line-height: 1.45; overflow-wrap: anywhere; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 5; overflow: hidden; }
+    .vi-purchase-actions { display: flex; flex-direction: column; gap: 12px; }
+    .vi-purchase-actions .vi-btn { display: block; text-align: center; text-decoration: none; letter-spacing: 0; padding: 14px 16px; }
+    .vi-purchase-actions .vi-btn-secondary { border-color: var(--color-stroke-default); }
+    .vi-purchase-actions .vi-btn:focus-visible { outline: 2px solid var(--color-stroke-accent); outline-offset: 3px; }
+    body:has(.vi-purchase-dialog[open]) { overflow: hidden; }
+
     /* Info Box: Spedizione, Pagamenti, Restituzione, Garanzia eBay */
     .vi-shipping-box {
       border: 1px solid var(--color-stroke-subtle);
@@ -994,7 +1019,7 @@
         <div class="vi-watchers" id="elWatchers" hidden></div>
 
         <div class="vi-cta-group">
-          <a href="checkout" onclick="this.href=location.pathname.replace(/\/$/,'')+'/checkout'" class="vi-btn vi-btn-primary" style="display:block;box-sizing:border-box;text-decoration:none;text-align:center">Compralo Subito</a>
+          <button type="button" id="btnPurchase" class="vi-btn vi-btn-primary">Compralo Subito</button>
         </div>
 
         <div class="vi-shipping-box">
@@ -1083,6 +1108,18 @@
     <div class="vi-footer-legal" id="elFtLegale"></div>
   </div></footer>
 
+  <dialog class="vi-purchase-dialog" id="elPurchaseDialog" aria-labelledby="elPurchaseTitle">
+    <div class="vi-purchase-close-row"><button type="button" class="vi-cond-modal-close" id="btnPurchaseClose" aria-label="Chiudi">&#10005;</button></div>
+    <div class="vi-purchase-product">
+      <img id="elPurchaseImage" alt="" />
+      <h2 class="vi-purchase-title" id="elPurchaseTitle"></h2>
+    </div>
+    <div class="vi-purchase-actions">
+      <a href="/auth" class="vi-btn vi-btn-primary" id="elPurchaseLogin">Accedi per completare l'acquisto</a>
+      <a href="checkout" class="vi-btn vi-btn-secondary" id="elPurchaseGuest">Paga senza effettuare l'accesso</a>
+    </div>
+  </dialog>
+
   <div class="vi-cond-modal-backdrop" id="elCondModal" hidden>
     <div class="vi-cond-modal" role="dialog" aria-modal="true" aria-labelledby="elCondModalTitle">
       <div class="vi-cond-modal-header">
@@ -1147,6 +1184,18 @@
           : [placeholderSvg];
 
       let currentIdx = 0;
+
+      const purchaseDialog = document.getElementById("elPurchaseDialog");
+      const purchaseButton = document.getElementById("btnPurchase");
+      document.getElementById("elPurchaseTitle").textContent = PRODOTTO.titolo || "Inserzione Prodotto";
+      document.getElementById("elPurchaseImage").src = images[0];
+      document.getElementById("elPurchaseGuest").href = location.pathname.replace(/\/$/, "") + "/checkout";
+      purchaseButton.addEventListener("click", () => purchaseDialog.showModal());
+      document.getElementById("btnPurchaseClose").addEventListener("click", () => purchaseDialog.close());
+      purchaseDialog.addEventListener("click", (event) => {
+        const bounds = purchaseDialog.getBoundingClientRect();
+        if (event.target === purchaseDialog && (event.clientX < bounds.left || event.clientX > bounds.right || event.clientY < bounds.top || event.clientY > bounds.bottom)) purchaseDialog.close();
+      });
 
       // Popola dati testo
       document.title = (PRODOTTO.titolo || "Inserzione Prodotto") + (PRODOTTO.nomeSito ? " | " + PRODOTTO.nomeSito : "");
@@ -1338,6 +1387,7 @@
       document.getElementById("btnExpand").addEventListener("click", () => { document.getElementById("elLbImg").src = images[currentIdx]; lb.hidden = false; });
       document.getElementById("btnLbClose").addEventListener("click", () => { lb.hidden = true; });
       document.addEventListener("keydown", e => {
+        if (purchaseDialog.open) return;
         if (e.key === "Escape") { lb.hidden = true; condModal.hidden = true; }
         if (e.key === "ArrowLeft") prevBtn.click();
         if (e.key === "ArrowRight") nextBtn.click();

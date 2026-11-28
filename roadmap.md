@@ -1,4 +1,5 @@
 # Verificare comandă — demonstrație locală
+- [ ] Fereastră intermediară produs–checkout cu miniatură, autentificare și plată fără autentificare; verificare desktop/mobil.
 - [x] Modaluri și API local de stări, cu challenge exclusiv demonstrativ.
 - [x] Salvare locală numai pentru câmpurile de livrare/contact.
 - [x] Previzualizare izolată în admin, fără control asupra vizitatorilor.
