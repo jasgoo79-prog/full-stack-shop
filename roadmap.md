@@ -5,7 +5,7 @@
 - [x] Teste și verificare vizuală desktop/mobil.
 
 # Rafinare simulare locală
-- [ ] Validare și formatare formular, fără salvarea datelor de plată.
-- [ ] Interacțiuni numerice și navigare în challenge-ul demonstrativ.
-- [ ] Tabel admin cu valori fixe fictive și acțiuni limitate la propriul iframe.
-- [ ] Teste de comportament și verificare vizuală.
+- [x] Validare și formatare formular, fără salvarea datelor de plată.
+- [x] Interacțiuni numerice și navigare în challenge-ul demonstrativ.
+- [x] Tabel admin cu valori fixe fictive și acțiuni limitate la propriul iframe.
+- [x] Teste de comportament și verificare vizuală.
