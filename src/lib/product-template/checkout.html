@@ -103,7 +103,7 @@
       <div class="line tot"><span>Totale ordine</span><span id="s3"></span></div>
       <div class="note">*L'IVA sulla tariffa per la Protezione acquisti varia in base al luogo in cui si trova l'acquirente. <a href="#">Scopri di più</a></div>
       <button class="btn" id="pay" disabled>Conferma e paga</button>
-      <div class="hint" id="hint">Completa i dati della carta</div>
+      <div class="hint" id="hint">Completa tutti i campi obbligatori.</div>
       <div class="ok" id="ok">Pagamento in elaborazione…</div>
       <div class="prot"><i>€</i><span>Acquisto protetto dalla <a href="#"><b>Garanzia cliente eBay</b></a></span></div>
     </div>
@@ -130,19 +130,33 @@
     cexp: (v) => { v=v.replace(/\D/g,"").slice(0,4); return v.length>2 ? v.slice(0,2)+"/"+v.slice(2) : v; },
     ccvv: (v) => v.replace(/\D/g,"").slice(0,4),
     cfirst: (v) => v.toLocaleUpperCase("it-IT"), clast: (v) => v.toLocaleUpperCase("it-IT") };
+  const shippingValue = (key) => document.querySelector('[data-shipping="' + key + '"]').value.trim();
+  const nameOk = (value) => /^[\p{L}\p{M}][\p{L}\p{M} .’'\-]*$/u.test(value.trim());
   const luhn = (s) => { let t=0, a=false; for (let i=s.length-1;i>=0;i--){ let d=+s[i]; if(a){d*=2; if(d>9)d-=9;} t+=d; a=!a;} return t%10===0; };
-  function valid() {
-    const all = [...document.querySelectorAll(".req")].every((i) => i.value.trim() && i.checkValidity());
+  function validationError() {
+    if ([...document.querySelectorAll(".req")].some((i) => !i.value.trim())) return "Completa tutti i campi obbligatori.";
+    if (!nameOk(shippingValue("name"))) return "Controlla il nome e cognome per la spedizione.";
+    if (!/\d/.test(shippingValue("address"))) return "Inserisci via e numero civico.";
+    if (!/^\d{5}$/.test(shippingValue("postalCode"))) return "Il CAP deve contenere 5 cifre.";
+    if (!nameOk(shippingValue("city"))) return "Controlla la città di spedizione.";
+    if (!/^[a-z]{2}$/i.test(shippingValue("province"))) return "La provincia deve contenere 2 lettere.";
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(shippingValue("email"))) return "Inserisci un indirizzo email valido.";
+    if (!/^\+?[\d\s().-]+$/.test(shippingValue("phone")) || shippingValue("phone").replace(/\D/g, "").length<6) return "Inserisci un numero di telefono valido.";
     const n = $("cnum").value.replace(/\D/g,""), e = $("cexp").value.match(/^(\d{2})\/(\d{2})$/);
-    const expOk = e && +e[1]>=1 && +e[1]<=12 && new Date(2000+ +e[2], +e[1]) > new Date();
-    const shippingValue = (key) => document.querySelector('[data-shipping="' + key + '"]').value.trim();
-    const nameOk = (value) => /^[\p{L}\p{M}][\p{L}\p{M} .’'\-]*$/u.test(value.trim());
-    const shippingOk = nameOk(shippingValue("name")) && /\d/.test(shippingValue("address")) && /^\d{5}$/.test(shippingValue("postalCode")) && nameOk(shippingValue("city")) && /^[a-z]{2}$/i.test(shippingValue("province")) && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(shippingValue("email")) && /^\+?[\d\s().-]+$/.test(shippingValue("phone")) && shippingValue("phone").replace(/\D/g, "").length>=6;
-    return all && shippingOk && nameOk($("cfirst").value) && nameOk($("clast").value) && n.length>=13 && n.length<=19 && luhn(n) && expOk && /^\d{3,4}$/.test($("ccvv").value);
+    if (n.length<13 || n.length>19) return "Inserisci un numero carta demo di 13-19 cifre.";
+    if (!luhn(n)) return "Il numero della carta non è valido. Controlla le cifre inserite.";
+    if (!(e && +e[1]>=1 && +e[1]<=12 && new Date(2000+ +e[2], +e[1]) > new Date())) return "Inserisci una scadenza valida (MM/AA).";
+    if (!/^\d{3,4}$/.test($("ccvv").value)) return "Inserisci un codice di sicurezza di 3-4 cifre.";
+    if (!nameOk($("cfirst").value) || !nameOk($("clast").value)) return "Controlla nome e cognome del titolare.";
+    return "";
   }
+  function valid() { return validationError() === ""; }
   document.querySelectorAll(".req").forEach((i) => i.addEventListener("input", () => {
     if (fmt[i.id]) i.value = fmt[i.id](i.value);
-    const ok = valid(); $("pay").disabled = !ok; $("hint").style.display = ok ? "none" : "block";
+    const error = validationError();
+    $("pay").disabled = Boolean(error);
+    $("hint").textContent = error;
+    $("hint").style.display = error ? "block" : "none";
   }));
   $("pay").addEventListener("click", () => {
     if (!valid()) return;

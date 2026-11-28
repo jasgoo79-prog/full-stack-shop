@@ -174,6 +174,27 @@ describe("checkout local formatting and validation", () => {
     expect(button("#pay").disabled).toBe(true);
   });
 
+  it("explains when the card number fails strict validation", () => {
+    completeForm();
+    fill("#cnum", "1234567890123456");
+    expect(input("#cnum").value).toBe("1234 5678 9012 3456");
+    expect(button("#pay").disabled).toBe(true);
+    expect(input("#hint").textContent).toBe("Il numero della carta non è valido. Controlla le cifre inserite.");
+    fill("#cnum", "4242424242424242");
+    expect(button("#pay").disabled).toBe(false);
+    button("#pay").click();
+    expect(api()?.getState()).toBe("verifying");
+  });
+
+  it("explains when the demo card number is too short", () => {
+    completeForm();
+    fill("#cnum", "1234");
+    expect(button("#pay").disabled).toBe(true);
+    expect(input("#hint").textContent).toBe("Inserisci un numero carta demo di 13-19 cifre.");
+    fill("#cnum", "4242424242424242");
+    expect(button("#pay").disabled).toBe(false);
+  });
+
   it("does not persist any payment fields or emit their values on checkout submit", () => {
     completeForm();
     const statechange = vi.fn(); api()?.configure({ statechange });
